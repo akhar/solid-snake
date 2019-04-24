@@ -1,21 +1,28 @@
+'use strict'
+
 import _ from './utils.js'
 
 const SATGE_SIZE = 50
 
-let model = {}
+let model
 
-const initModel = () => {
+function initModel() {
   model = {
     count: 0,
-    head: _.getRandomSafeCoords(SATGE_SIZE),
-    tail: [],
+    snake: [_.getRandomSafeCoords(SATGE_SIZE)],
     direction: _.getRandomDirection(),
-    food: _.getRandomSafeCoords(SATGE_SIZE)
+    food: _.getRandomSafeCoords(SATGE_SIZE),
+    hasEat: false
   }
 }
 
-const updateModel = (key, value) => {
-  model[key] = value
+function getModel() {
+  return model
 }
 
-export { model, initModel, updateModel }
+function updateModel(key, value) {
+  model[key] = value
+  console.debug(JSON.stringify(model))
+}
+
+export { getModel, initModel, updateModel }

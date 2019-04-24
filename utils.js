@@ -1,16 +1,18 @@
 const _ = {
-  getRandomInRange: (from, to) => Math.floor(Math.random() * (to - from) + from), //from inclusve to exclusive
+  getRandomInRange: (from, to) =>
+    Math.floor(Math.random() * (to - from) + from), //from inclusve to exclusive
 
   getRandomSafeCoords: max => {
-    return [
-      _.getRandomInRange(Math.floor(max / 3), max - Math.floor(max / 3)),
-      _.getRandomInRange(Math.floor(max / 3), max - Math.floor(max / 3))
-    ]
+    return {
+      x: _.getRandomInRange(Math.floor(max / 3), max - Math.floor(max / 3)),
+      y: _.getRandomInRange(Math.floor(max / 3), max - Math.floor(max / 3))
+    }
   },
 
   getRandomCoords: max => {
-    return [_.getRandomInRange(0, max), _.getRandomInRange(0, max)]
+    return { x: _.getRandomInRange(0, max), y: _.getRandomInRange(0, max) }
   },
+
   getRandomDirection: () => {
     const seed = _.getRandomInRange(0, 4)
     switch (seed) {

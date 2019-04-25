@@ -1,17 +1,16 @@
 'use strict'
 
+import { cfg } from './config.js'
 import _ from './utils.js'
-
-const SATGE_SIZE = 50
 
 let model
 
 function initModel() {
   model = {
     count: 0,
-    snake: [_.getRandomSafeCoords(SATGE_SIZE)],
+    snake: [_.getRandomSafeCoords(cfg.SATGE_SIZE * cfg.GRID_SIZE)],
     direction: _.getRandomDirection(),
-    food: _.getRandomSafeCoords(SATGE_SIZE),
+    food: _.getRandomSafeCoords(cfg.SATGE_SIZE * cfg.GRID_SIZE),
     hasEat: false
   }
 }

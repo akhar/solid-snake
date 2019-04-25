@@ -1,21 +1,38 @@
 'use strict'
 
+import { cfg } from './config.js'
 import { getModel } from './model.js'
 
-var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+function render() {
+  clear()
+  paint()
+}
 
-svg.setAttribute('id', 'stage')
-document.body.appendChild(svg)
+const canvas = document.getElementById('stage')
+const stage = canvas.getContext('2d')
 
-function updateView() {
-  document.body.removeChild('.snake')
+function clear() {
+  stage.clearRect(
+    0,
+    0,
+    cfg.SATGE_SIZE * cfg.GRID_SIZE,
+    cfg.SATGE_SIZE * cfg.GRID_SIZE
+  )
+}
+
+function paint() {
   const model = getModel()
-  model.snake.forEach((segment, index) => {
-    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-    svg.setAttribute('id', 'segment' + index)
-    svg.setAttribute('class', 'snake')
-    document.body.appendChild(svg)
+  paintFood()
+  model.snake.map(segment => {
+    stage.fillStyle = 'darkolivegreen'
+    stage.fillRect(segment.x, segment.y, cfg.TILE_SIZE, cfg.TILE_SIZE)
   })
 }
 
-export { updateView }
+function paintFood() {
+  const model = getModel()
+  stage.fillStyle = 'firebrick'
+  stage.fillRect(model.food.x, model.food.y, cfg.TILE_SIZE, cfg.TILE_SIZE)
+}
+
+export { render }

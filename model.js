@@ -1,18 +1,11 @@
 'use strict'
 
-import { cfg } from './config.js'
-import _ from './utils.js'
+import { initModel } from './service.js'
 
-let model
+let model = initModel()
 
-function initModel() {
-  model = {
-    count: 0,
-    snake: [_.getRandomSafeCoords(cfg.SATGE_SIZE * cfg.GRID_SIZE)],
-    direction: _.getRandomDirection(),
-    food: _.getRandomSafeCoords(cfg.SATGE_SIZE * cfg.GRID_SIZE),
-    hasEat: false
-  }
+function resetModel() {
+  model = initModel()
 }
 
 function getModel() {
@@ -24,4 +17,4 @@ function updateModel(key, value) {
   console.debug(JSON.stringify(model))
 }
 
-export { getModel, initModel, updateModel }
+export { getModel, updateModel, resetModel }

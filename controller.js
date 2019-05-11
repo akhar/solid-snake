@@ -1,20 +1,23 @@
 'use strict'
 
-import { updateModel } from './model.js'
+import { changeDirection, restart } from './service.js'
 
 function handleKeyDown(event) {
   switch (event.keyCode) {
     case 37: //left
-      updateModel('direction', 'x--')
+      changeDirection('x--')
       break
     case 38: //up
-      updateModel('direction', 'y--')
+      changeDirection('y--')
       break
     case 39: //right
-      updateModel('direction', 'x++')
+      changeDirection('x++')
       break
     case 40: //down
-      updateModel('direction', 'y++')
+      changeDirection('y++')
+      break
+    case 32: //space
+      restart()
       break
   }
 }

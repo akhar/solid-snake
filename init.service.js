@@ -9,13 +9,15 @@ function initModel() {
   const direction = _.getRandomDirection()
   const startPoint = [_.getRandomSafeCoords(cfg.SATGE_SIZE * cfg.GRID_SIZE)]
   const snake = growHead(growHead(startPoint, direction), direction) // TODO: refactor this shit
+  const food = _.getRandomSafeCoords(cfg.SATGE_SIZE * cfg.GRID_SIZE)
 
   return {
     count: 0,
     snake,
     direction,
-    food: _.getRandomSafeCoords(cfg.SATGE_SIZE * cfg.GRID_SIZE),
-    hasAte: false
+    food,
+    hasAte: false,
+    pause: false
   }
 }
 

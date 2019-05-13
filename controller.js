@@ -1,6 +1,7 @@
 'use strict'
 
-import { changeDirection, restartGame } from './service.js'
+import { getModel } from './model.js'
+import { changeDirection, pauseGame, restartGame, resumeGame } from './service.js'
 
 function handleKeyDown(event) {
   switch (event.keyCode) {
@@ -16,8 +17,11 @@ function handleKeyDown(event) {
     case 40: //down
       changeDirection('y++')
       break
-    case 32: //space
+    case 13: //enter
       restartGame()
+      break
+    case 32: //space
+      getModel().pause ? resumeGame() : pauseGame()
       break
   }
 }

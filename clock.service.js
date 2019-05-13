@@ -7,11 +7,12 @@ let clockId
 
 function startClock() {
   clockId = setInterval(tick, cfg.SPEED)
+  console.debug('Start')
 }
 
 function stopClock() {
   clearInterval(clockId)
-  console.debug('<<< STOP CLOCK >>>')
+  console.debug('Stop')
 }
 
 export { startClock, stopClock }

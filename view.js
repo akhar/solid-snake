@@ -32,8 +32,9 @@ function paint() {
 }
 
 function paintSnake(model) {
-  model.snake.map(segment => {
-    stage.fillStyle = cfg.SNAKE_COLOR
+  model.snake.map((segment, index) => {
+    const alpha = index > 6 ? 0.6 : 1 / (index + 1)
+    stage.fillStyle = `rgba(85, 107,	47, ${alpha})`
     stage.fillRect(segment.x, segment.y, cfg.TILE_SIZE, cfg.TILE_SIZE)
   })
 }

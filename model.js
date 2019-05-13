@@ -1,6 +1,6 @@
 'use strict'
 
-import { initModel } from './service.js'
+import { initModel } from './init.service.js'
 
 let model = initModel()
 

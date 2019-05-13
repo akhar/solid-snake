@@ -1,16 +1,31 @@
 'use strict'
 
+import { startClock, stopClock } from './clock.service.js'
 import { cfg } from './config.js'
-import { main } from './main.js'
+import { initController, initModel } from './init.service.js'
 import { getModel, resetModel, updateModel } from './model.js'
 import _ from './utils.js'
-import { clearPanel, print } from './view.js'
+import { clearPanel, print, render } from './view.js'
 
-function restart() {
+function startGame() {
+  initModel()
+  initController()
+  startClock()
+}
+
+function restartGame() {
   resetModel()
   clearPanel()
-  main()
-  // TODO: reset tiker
+  stopClock()
+  startGame()
+}
+
+function tick() {
+  checkConditions()
+  makeStep()
+  checkConditions()
+  render()
+  console.debug('________________')
 }
 
 function makeStep() {
@@ -23,32 +38,32 @@ function makeStep() {
   updateModel('snake', newSnake)
 }
 
-function checkConditions(tiker) {
+function checkConditions() {
   const model = getModel()
   const head = model.snake[0]
 
   if (_.isCoodrsEqual(head, model.food)) {
-    eating(model.count)
+    eating(model.count, model.snake, model.direction)
   }
 
   // border hit
   if (
-    head.x <= 0 ||
-    head.y <= 0 ||
-    head.x >= cfg.SATGE_SIZE * cfg.GRID_SIZE - cfg.GRID_SIZE ||
-    head.y >= cfg.SATGE_SIZE * cfg.GRID_SIZE - cfg.GRID_SIZE
+    head.x < 0 ||
+    head.y < 0 ||
+    head.x > cfg.SATGE_SIZE * cfg.GRID_SIZE - cfg.GRID_SIZE ||
+    head.y > cfg.SATGE_SIZE * cfg.GRID_SIZE - cfg.GRID_SIZE
   ) {
     print('Game Over')
-    clearInterval(tiker)
-    console.debug('<<< STOP TICKER >>>')
+    stopClock()
   }
 }
 
-function eating(count) {
+function eating(count, snake, direction) {
   updateModel('hasAte', true)
   updateModel('count', ++count)
+  growHead(snake, direction)
   palceFood()
-  // TODO: eating on edge; eating without shrink
+  // TODO: eating without shrink
 }
 
 function palceFood() {
@@ -73,24 +88,10 @@ function dropTail(snake) {
   return snake.slice(0, -1)
 }
 
-function initModel() {
-  const direction = _.getRandomDirection()
-  const startPoint = [_.getRandomSafeCoords(cfg.SATGE_SIZE * cfg.GRID_SIZE)]
-  const snake = growHead(growHead(startPoint, direction), direction) // TODO: refactor this shit
-
-  return {
-    count: 0,
-    snake,
-    direction,
-    food: _.getRandomSafeCoords(cfg.SATGE_SIZE * cfg.GRID_SIZE),
-    hasAte: false
-  }
-}
-
 function changeDirection(newDirection) {
   const direction = getModel().direction
-  // condition prevents reverse and duplicating of movments
+  // condition prevents reverse and duplicating of movments TODO: not enought
   direction[0] !== newDirection[0] && updateModel('direction', newDirection)
 }
 
-export { makeStep, checkConditions, initModel, changeDirection, restart }
+export { growHead, changeDirection, restartGame, startGame, tick }

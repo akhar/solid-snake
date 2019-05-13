@@ -1,6 +1,6 @@
 'use strict'
 
-import { changeDirection, restart } from './service.js'
+import { changeDirection, restartGame } from './service.js'
 
 function handleKeyDown(event) {
   switch (event.keyCode) {
@@ -17,9 +17,9 @@ function handleKeyDown(event) {
       changeDirection('y++')
       break
     case 32: //space
-      restart()
+      restartGame()
       break
   }
 }
 
-window.addEventListener('keydown', handleKeyDown)
+export { handleKeyDown }

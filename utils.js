@@ -1,17 +1,38 @@
-import { cfg } from './config.js'
+import cfg from './config.js'
 
 const _ = {
-  getRandomSafeCoords: max => {
+  getRandomLeftCoords: () => {
+    const max = cfg.SATGE_SIZE * cfg.GRID_SIZE - cfg.GRID_SIZE
+
     return {
-      x: roundToGrid(getRandomInRange(Math.floor(max / 3), max - Math.floor(max / 3))),
-      y: roundToGrid(getRandomInRange(Math.floor(max / 3), max - Math.floor(max / 3)))
+      x: roundToGrid(getRandomInRange(Math.floor(max / 5), Math.floor(max / 2))),
+      y: roundToGrid(getRandomInRange(Math.floor(max / 5), max - Math.floor(max / 5)))
     }
   },
 
-  getRandomCoords: max => {
+  getRandomRightCoords: () => {
+    const max = cfg.SATGE_SIZE * cfg.GRID_SIZE - cfg.GRID_SIZE
+
+    return {
+      x: roundToGrid(getRandomInRange(Math.floor(max / 2), max - Math.floor(max / 5))),
+      y: roundToGrid(getRandomInRange(Math.floor(max / 5), max - Math.floor(max / 5)))
+    }
+  },
+
+  getRandomCoords: () => {
+    const max = cfg.SATGE_SIZE * cfg.GRID_SIZE - cfg.GRID_SIZE
     return {
       x: roundToGrid(getRandomInRange(0, max)),
       y: roundToGrid(getRandomInRange(0, max))
+    }
+  },
+
+  getFoodCoords: model => {
+    const attemption = _.getRandomCoords()
+    if ([...model.snakeL, ...model.snakeR].includes(attemption)) {
+      return _.getFoodCoords(model)
+    } else {
+      return attemption
     }
   },
 

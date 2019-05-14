@@ -1,10 +1,10 @@
 'use strict'
 
 import { startClock, stopClock } from './clock.service.js'
-import { cfg } from './config.js'
+import cfg from './config.js'
 import { initController, initModel } from './init.service.js'
 import { getModel, resetModel, updateModel } from './model.js'
-import { clearPanel, clearTitle, print, renderFrame } from './render.js'
+import { clear, print, renderFrame } from './render.js'
 import _ from './utils.js'
 
 function startGame() {
@@ -15,7 +15,7 @@ function startGame() {
 
 function restartGame() {
   resetModel()
-  clearPanel()
+  clear.panel()
   stopClock()
   startGame()
 }
@@ -28,12 +28,13 @@ function pauseGame() {
 
 function resumeGame() {
   updateModel('pause', false)
-  clearTitle()
+  clear.title()
   startClock()
 }
 
 function finishGame() {
   stopClock()
+  updateModel('isGameOver', true)
   print('Game Over')
 }
 
@@ -49,34 +50,55 @@ function tick() {
 }
 
 function cacheDirection() {
-  const direction = getModel().direction
-  updateModel('cached_direction', direction)
+  updateModel('cached_directionL', getModel().directionL)
+  updateModel('cached_directionR', getModel().directionR)
 }
 
 function makeStep() {
   const model = getModel()
-  const newSnake = model.hasAte
-    ? growHead(model.snake, model.direction)
-    : dropTail(growHead(model.snake, model.direction))
 
-  model.hasAte && updateModel('hasAte', false)
-  updateModel('snake', newSnake)
+  const newSnakeL = model.hasAteL
+    ? growHead(model.snakeL, model.directionL)
+    : dropTail(growHead(model.snakeL, model.directionL))
+
+  model.hasAteL && updateModel('hasAteL', false)
+  updateModel('snakeL', newSnakeL)
+
+  const newSnakeR = model.hasAteR
+    ? growHead(model.snakeR, model.directionR)
+    : dropTail(growHead(model.snakeR, model.directionR))
+
+  model.hasAteR && updateModel('hasAteR', false)
+  updateModel('snakeR', newSnakeR)
 }
 
 function checkConditions() {
   const model = getModel()
-  const head = model.snake[0]
-  const tail = model.snake.slice(1)
-  const direction = model.direction
-  const nextTale = growHead([head], direction)[0]
 
-  if (_.isCoodrsEqual(head, model.food)) {
-    eating(model.count, model.snake, direction)
+  const headL = model.snakeL[0]
+  const tailL = model.snakeL.slice(1)
+  const directionL = model.directionL
+  const nextTaleL = growHead([headL], directionL)[0]
+  const headR = model.snakeR[0]
+  const tailR = model.snakeR.slice(1)
+  const directionR = model.directionR
+  const nextTaleR = growHead([headR], directionR)[0]
+
+  if (_.isCoodrsEqual(headL, model.food)) {
+    eating(model.countL, model.snakeL, directionL, 'LEFT')
+  }
+  if (_.isCoodrsEqual(headR, model.food)) {
+    eating(model.countR, model.snakeR, directionR, 'RIGHT')
   }
 
   let cannibalism = false
-  tail.forEach(segment => {
-    if (_.isCoodrsEqual(nextTale, segment)) {
+  tailL.forEach(segment => {
+    if (_.isCoodrsEqual(nextTaleL, segment)) {
+      cannibalism = true
+    }
+  })
+  tailR.forEach(segment => {
+    if (_.isCoodrsEqual(nextTaleR, segment)) {
       cannibalism = true
     }
   })
@@ -85,10 +107,14 @@ function checkConditions() {
     finishGame()
     return Promise.reject('Cannibalism')
   } else if (
-    (head.x === 0 && direction === 'x--') ||
-    (head.y === 0 && direction === 'y--') ||
-    (head.x === cfg.SATGE_SIZE * cfg.GRID_SIZE - cfg.GRID_SIZE && direction === 'x++') ||
-    (head.y === cfg.SATGE_SIZE * cfg.GRID_SIZE - cfg.GRID_SIZE && direction === 'y++')
+    (headL.x === 0 && directionL === 'x--') ||
+    (headR.x === 0 && directionR === 'x--') ||
+    (headL.y === 0 && directionL === 'y--') ||
+    (headR.y === 0 && directionR === 'y--') ||
+    (headL.x === cfg.SATGE_SIZE * cfg.GRID_SIZE - cfg.GRID_SIZE && directionL === 'x++') ||
+    (headR.x === cfg.SATGE_SIZE * cfg.GRID_SIZE - cfg.GRID_SIZE && directionR === 'x++') ||
+    (headL.y === cfg.SATGE_SIZE * cfg.GRID_SIZE - cfg.GRID_SIZE && directionL === 'y++') ||
+    (headR.y === cfg.SATGE_SIZE * cfg.GRID_SIZE - cfg.GRID_SIZE && directionR === 'y++')
   ) {
     finishGame()
     return Promise.reject('Border hit')
@@ -97,15 +123,22 @@ function checkConditions() {
   }
 }
 
-function eating(count, snake, direction) {
-  updateModel('hasAte', true)
-  updateModel('count', ++count)
-  growHead(snake, direction)
+function eating(count, snake, direction, player) {
+  if (player === 'LEFT') {
+    updateModel('hasAteL', true)
+    updateModel('countL', ++count)
+    growHead(snake, direction)
+  } else {
+    updateModel('hasAteR', true)
+    updateModel('countR', ++count)
+    growHead(snake, direction)
+  }
   palceFood()
 }
 
 function palceFood() {
-  updateModel('food', _.getRandomCoords(cfg.SATGE_SIZE * cfg.GRID_SIZE - cfg.GRID_SIZE))
+  const model = getModel()
+  updateModel('food', _.getFoodCoords(model))
 }
 
 function growHead(snake, direction) {
@@ -126,10 +159,25 @@ function dropTail(snake) {
   return snake.slice(0, -1)
 }
 
-function changeDirection(newDirection) {
-  const cachedDirection = getModel().cached_direction
+function changeDirectionL(newDirection) {
+  const cachedDirection = getModel().cached_directionL
 
-  newDirection[0] !== cachedDirection[0] && updateModel('direction', newDirection)
+  newDirection[0] !== cachedDirection[0] && updateModel('directionL', newDirection)
 }
 
-export { growHead, changeDirection, restartGame, startGame, tick, pauseGame, resumeGame }
+function changeDirectionR(newDirection) {
+  const cachedDirection = getModel().cached_directionR
+
+  newDirection[0] !== cachedDirection[0] && updateModel('directionR', newDirection)
+}
+
+export {
+  growHead,
+  changeDirectionL,
+  changeDirectionR,
+  restartGame,
+  startGame,
+  tick,
+  pauseGame,
+  resumeGame
+}

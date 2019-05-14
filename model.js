@@ -14,7 +14,6 @@ function getModel() {
 
 function updateModel(key, value) {
   model[key] = value
-  // console.debug(JSON.stringify(model))
 }
 
 export { getModel, updateModel, resetModel }

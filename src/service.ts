@@ -1,27 +1,37 @@
-import { drowTriangle, Orient } from './render/triangle.js'
+import { drowTriangle } from './render/triangle.js'
 import { drowGrid } from './render/grid.js'
-import { H, B } from './cfg.js'
+import { startClock } from './time/clock.js'
+import { WIDTH, HEIGHT } from './cfg.js'
+import { TRIANLES } from './cfg.js'
 
-const ROWS = 58
-const COLS = 51
-
-const startGame = () => {
-  for (let j = 0; j < ROWS; j++) {
-    for (let i = -1; i < COLS; i++) {
-      j % 2 === 0
-        ? drowTriangle(i * B, j * H, Orient.DOWN)
-        : drowTriangle(i * B - B / 2, j * H, Orient.DOWN)
-    }
-  }
-
-  for (let j = 0; j < ROWS; j++) {
-    for (let i = -1; i < COLS; i++) {
-      j % 2 === 0
-        ? drowTriangle(B / 2 + i * B, j * H + H, Orient.UP)
-        : drowTriangle(B / 2 + i * B - B / 2, j * H + H, Orient.UP)
-    }
-  }
+function tick() {
+  clearStage()
+  console.log('clear')
   drowGrid()
+  showBackgroundArt()
 }
 
-export default startGame
+function clearStage() {
+  const canvas = document.getElementById('stage') as HTMLCanvasElement
+  const stage = canvas.getContext('2d') as CanvasRenderingContext2D
+  stage.clearRect(0, 0, WIDTH, HEIGHT)
+}
+
+export function initGame() {
+  const foo = startClock(tick)
+  console.debug(foo)
+}
+
+function startGame() {}
+
+function showMenu() {}
+
+function showBackgroundArt(): void {
+  for (let index = 0; index < 500; index++) {
+    drowTriangle(makeRundomUpTo(TRIANLES), makeRundomUpTo(TRIANLES * 2 - 1), 'PeachPuff')
+  }
+}
+
+function makeRundomUpTo(limit: number): number {
+  return Math.floor(Math.random() * limit + 1)
+}

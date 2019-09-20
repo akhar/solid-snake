@@ -1,9 +1,8 @@
-import startGame from './service.js';
+import { initGame } from './service.js';
 import { HEIGHT, WIDTH } from './cfg.js';
-const run = () => {
+window.onload = () => {
     const canvas = document.getElementById('stage');
     canvas.width = WIDTH;
     canvas.height = HEIGHT;
-    startGame();
+    initGame();
 };
-window.onload = run;

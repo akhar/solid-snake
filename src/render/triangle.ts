@@ -5,13 +5,19 @@ export enum Orient {
   UP,
 }
 
-export interface Triangle {
-  x: number
-  y: number
-  orientation: Orient
+export function drowTriangle(row: number, column: number, color: string): void {
+  const isRowOdd: boolean = row % 2 === 0
+  const isColumnOdd: boolean = column % 2 === 0
+  const orientation: Orient =
+    (isRowOdd && isColumnOdd) || (!isRowOdd && !isColumnOdd) ? Orient.DOWN : Orient.UP
+
+  const x: number = ((column - 1) / 2) * B
+  const y: number = orientation === Orient.DOWN ? (row - 1) * H : row * H
+
+  drowTriangleAtPoint(x, y, orientation, color)
 }
 
-export function drowTriangle(x: number, y: number, orientation: Orient): void {
+function drowTriangleAtPoint(x: number, y: number, orientation: Orient, color: string): void {
   const canvas = document.getElementById('stage') as HTMLCanvasElement
   const stage = canvas.getContext('2d') as CanvasRenderingContext2D
 
@@ -23,6 +29,6 @@ export function drowTriangle(x: number, y: number, orientation: Orient): void {
   triangle.lineTo(B + x, y)
   triangle.closePath()
 
-  stage.fillStyle = 'lightblue'
+  stage.fillStyle = color
   stage.fill(triangle)
 }

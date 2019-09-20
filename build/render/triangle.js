@@ -4,7 +4,15 @@ export var Orient;
     Orient[Orient["DOWN"] = 0] = "DOWN";
     Orient[Orient["UP"] = 1] = "UP";
 })(Orient || (Orient = {}));
-export function drowTriangle(x, y, orientation) {
+export function drowTriangle(row, column, color) {
+    const isRowOdd = row % 2 === 0;
+    const isColumnOdd = column % 2 === 0;
+    const orientation = (isRowOdd && isColumnOdd) || (!isRowOdd && !isColumnOdd) ? Orient.DOWN : Orient.UP;
+    const x = ((column - 1) / 2) * B;
+    const y = orientation === Orient.DOWN ? (row - 1) * H : row * H;
+    drowTriangleAtPoint(x, y, orientation, color);
+}
+function drowTriangleAtPoint(x, y, orientation, color) {
     const canvas = document.getElementById('stage');
     const stage = canvas.getContext('2d');
     const orientedCoordinate = orientation === Orient.DOWN ? y + H : y - H;
@@ -13,6 +21,6 @@ export function drowTriangle(x, y, orientation) {
     triangle.lineTo(B / 2 + x, orientedCoordinate);
     triangle.lineTo(B + x, y);
     triangle.closePath();
-    stage.fillStyle = 'lightblue';
+    stage.fillStyle = color;
     stage.fill(triangle);
 }

@@ -1,0 +1,26 @@
+{
+  "name": "solid-snake",
+  "version": "0.1.0",
+  "description": "snake game",
+  "main": "build/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel src/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akhar/solid-snake.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akhar/solid-snake/issues"
+  },
+  "homepage": "https://github.com/akhar/solid-snake#readme",
+  "devDependencies": {
+    "typescript": "^3.6.3"
+  },
+  "dependencies": {
+    "rxjs": "^6.5.3"
+  }
+}

@@ -1,6 +1,6 @@
-import { B, H, GRID_COLOR } from '../cfg.js'
+import { B, H, GRID_COLOR, PANEL_FONT } from '../cfg'
 
-export function drowPanel(canvas: HTMLCanvasElement, text: string): void {
+export function drowPanelOnCanvas(canvas: HTMLCanvasElement, text: string): void {
   const panel = canvas.getContext('2d') as CanvasRenderingContext2D
   const background = new Path2D()
 
@@ -15,6 +15,12 @@ export function drowPanel(canvas: HTMLCanvasElement, text: string): void {
   panel.fill(background)
 
   panel.fillStyle = 'white'
-  panel.font = 'italic 2em "Fira Sans", serif'
-  panel.fillText(text, 8 * B, 12 * H)
+  panel.font = PANEL_FONT
+  panel.fillText(text, 7.5 * B, 12 * H)
+}
+
+export function clearPanelOnCanvas(canvas: HTMLCanvasElement): void {
+  const panel = canvas.getContext('2d') as CanvasRenderingContext2D
+  panel.fillStyle = 'transpanent'
+  panel.fill()
 }

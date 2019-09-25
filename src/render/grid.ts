@@ -1,6 +1,6 @@
-import { HEIGHT, WIDTH, H, B, GRID_COLOR } from '../cfg.js'
+import { HEIGHT, WIDTH, H, B, GRID_COLOR } from '../cfg'
 
-export function drowGrid(canvas: HTMLCanvasElement): void {
+export function drowGridOnCanvas(canvas: HTMLCanvasElement): void {
   const backstage = canvas.getContext('2d') as CanvasRenderingContext2D
   const grid: Path2D = new Path2D()
 

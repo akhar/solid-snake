@@ -1,11 +1,11 @@
-import { H, B } from '../cfg.js'
+import { H, B, WIDTH, HEIGHT } from '../cfg'
 
 export enum Orient {
   DOWN,
   UP,
 }
 
-export function drowTriangle(
+export function drowTriangleOnCanvas(
   canvas: HTMLCanvasElement,
   row: number,
   column: number,
@@ -40,4 +40,9 @@ function drowTriangleAtPoint(
 
   stage.fillStyle = color
   stage.fill(triangle)
+}
+
+export function clearStageOnCanvas(canvas: HTMLCanvasElement): void {
+  const stage = canvas.getContext('2d') as CanvasRenderingContext2D
+  stage.clearRect(0, 0, WIDTH, HEIGHT)
 }

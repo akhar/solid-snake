@@ -1,47 +1,30 @@
-import { drowTriangle } from './render/stage.js'
-import { drowGrid } from './render/grid.js'
-import { startClock } from './time/clock.js'
-import { WIDTH, HEIGHT, TRIANGLES } from './cfg.js'
-import { drowPanel } from './render/panel.js'
+import { startClock } from './clock'
+import { TRIANGLES } from './cfg'
+import { Render } from './render/render'
 
-export function getTick(canvas: HTMLCanvasElement): Function {
+const render = new Render()
+
+export function initGame(): void {
+  render.init()
+  render.drowGrid()
+  startClock()
+  render.drowPanel('Press X to win')
+}
+
+export function getTick(): Function {
   return () => {
-    clearStage(canvas)
-    showBackgroundArt(canvas)
+    render.clearStage()
+    showBackgroundArt()
   }
 }
 
-function clearStage(canvas: HTMLCanvasElement): void {
-  const stage = canvas.getContext('2d') as CanvasRenderingContext2D
-  stage.clearRect(0, 0, WIDTH, HEIGHT)
-}
-
-export function initGame(): void {
-  const backstage = document.getElementById('backstage') as HTMLCanvasElement
-  backstage.width = WIDTH
-  backstage.height = HEIGHT
-  drowGrid(backstage)
-
-  const panel = document.getElementById('panel') as HTMLCanvasElement
-  panel.width = WIDTH
-  panel.height = HEIGHT
-  drowPanel(panel, 'Press X to win')
-
-  const stage = document.getElementById('stage') as HTMLCanvasElement
-  stage.width = WIDTH
-  stage.height = HEIGHT
-
-  startClock(stage)
-}
-
-function showBackgroundArt(canvas: HTMLCanvasElement): void {
+function showBackgroundArt(): void {
   for (let index = 0; index < 500; index++) {
     requestAnimationFrame(() =>
-      drowTriangle(
-        canvas,
+      render.drowTriangle(
         makeRundomUpTo(TRIANGLES),
         makeRundomUpTo(TRIANGLES * 2 - 1),
-        'PeachPuff'
+        'LightGoldenrodYellow'
       )
     )
   }

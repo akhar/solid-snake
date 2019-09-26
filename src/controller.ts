@@ -6,7 +6,7 @@ export function initController() {
   eventSource.pipe(map((event: KeyboardEvent) => event.code)).subscribe(handleKeyDown)
 }
 
-function handleKeyDown(key: string) {
+function handleKeyDown(key: KeyboardEvent.code) {
   switch (key) {
     case 'ArrowUp':
       alert(key)
@@ -18,6 +18,9 @@ function handleKeyDown(key: string) {
       alert(key)
       break
     case 'ArrowRight':
+      alert(key)
+      break
+    case 'KeyX':
       alert(key)
       break
   }

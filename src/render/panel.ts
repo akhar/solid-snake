@@ -16,7 +16,7 @@ export function drowPanelOnCanvas(canvas: HTMLCanvasElement, text: string): void
 
   panel.fillStyle = 'white'
   panel.font = PANEL_FONT
-  panel.fillText(text, 7.5 * B, 12 * H)
+  panel.fillText(text, 8 * B, 12 * H)
 }
 
 export function clearPanelOnCanvas(canvas: HTMLCanvasElement): void {

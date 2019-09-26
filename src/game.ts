@@ -1,6 +1,7 @@
 import { startClock } from './clock'
 import { TRIANGLES } from './cfg'
 import { Render } from './render/render'
+import { State, StateInterface } from './state'
 
 const render = new Render()
 
@@ -24,7 +25,7 @@ function showBackgroundArt(): void {
       render.drowTriangle(
         makeRundomUpTo(TRIANGLES),
         makeRundomUpTo(TRIANGLES * 2 - 1),
-        'LightGoldenrodYellow'
+        'NavajoWhite'
       )
     )
   }
@@ -32,4 +33,21 @@ function showBackgroundArt(): void {
 
 function makeRundomUpTo(limit: number): number {
   return Math.floor(Math.random() * limit + 1)
+}
+
+export class Game {
+  private render
+  private state
+
+  constructor() {
+    this.render = new Render()
+    this.state = new State()
+  }
+
+  public init(): void {
+    render.init()
+    render.drowGrid()
+    startClock()
+    render.drowPanel('Press X to win')
+  }
 }

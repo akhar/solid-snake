@@ -1,14 +1,17 @@
-import { GAME_FREQ, SYSTEM_FREQ } from './cfg'
-import { getTick } from './game'
+import { GAME_FREQ, ANIMATION_FREQ } from './cfg'
+import { interval, Subscription, Observable } from 'rxjs'
 
-let clockId: number
+export class Clock {
+  private gameIntrval: number = 1000 / GAME_FREQ // from Hz to intrval of milliseconds
+  private animationIntrval: number = 1000 / ANIMATION_FREQ // from Hz to intrval of milliseconds
 
-const intrval = 1000 / GAME_FREQ // from Hz to intrval of milliseconds
+  public animationStream: Subscription
 
-export function startClock(): void {
-  clockId = setInterval(getTick(), intrval)
-}
+  public startAnimation(observer): void {
+    this.animationStream = interval(this.animationIntrval).subscribe(observer)
+  }
 
-export function stopClock() {
-  clearInterval(clockId)
+  public stopAnimation(): void {
+    this.animationStream.unsubscribe()
+  }
 }

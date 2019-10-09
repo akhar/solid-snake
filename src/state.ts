@@ -1,40 +1,40 @@
-interface Coordinates {
+import { Subject, Subscription } from 'rxjs'
+
+type Coordinates = {
   row: number
   column: number
   color: string
 }
 
-export interface StateInterface {
+type StateChanges = {
+  name: string
+  value: string | number | boolean
+}
+
+type StateType = {
   snake: Coordinates[]
   prey: Coordinates
   score: number
 }
 
-export class State implements StateInterface {
-  private _snake: Coordinates[]
-  private _prey: Coordinates
-  private _score: number
+export interface StateInterface<T> {
+  subscribe(observer: T): Subscription
+}
 
-  constructor() {}
+export class State<T> implements StateInterface<T> {
+  private currentState: StateType
+  private state //TODO: type?
 
-  public get snake(): Coordinates[] {
-    return this._snake
-  }
-  public set snake(newSnake: Coordinates[]) {
-    this._snake = newSnake
-  }
-
-  public get prey(): Coordinates {
-    return this._prey
-  }
-  public set prey(newPrey: Coordinates) {
-    this.prey = newPrey
+  constructor(observer) {
+    //TODO: initial state
+    this.state = new Subject()
   }
 
-  public get score(): number {
-    return this._score
+  public subscribe(observer: T): Subscription {
+    return this.state.subscribe(observer)
   }
-  public set score(newScore: number) {
-    this._score = newScore
+
+  public changeState(changes: StateChanges): void {
+    //TODO: change state in subject
   }
 }

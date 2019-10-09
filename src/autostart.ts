@@ -1,7 +1,8 @@
-import { initGame } from './game'
+import { Game } from './game'
 import { initController } from './controller'
 
 window.onload = (): void => {
-  initGame()
+  const game = new Game()
+  game.init()
   initController()
 }

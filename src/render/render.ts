@@ -3,43 +3,43 @@ import { drowGridOnCanvas } from './grid'
 import { drowTriangleOnCanvas, clearStageOnCanvas } from './stage'
 import { WIDTH, HEIGHT } from '../cfg'
 import { Animation } from './animation'
-import { Subscription } from 'rxjs'
-import { StateInterface, State } from '../state'
+import { StateType, StateInterface } from '../state'
 
-export interface Render<StateInterface> {}
-
-export class Render<StateInterface> implements Render<StateInterface> {
+export class Render {
   private panel: HTMLCanvasElement
   private stage: HTMLCanvasElement
   private backstage: HTMLCanvasElement
-  private animation: Animation<StateInterface>
-  private animationStream: Subscription
-  private state
+  private animation: Animation
+  private state: StateInterface
 
   constructor(state: StateInterface) {
     this.panel = document.getElementById('panel') as HTMLCanvasElement
     this.stage = document.getElementById('stage') as HTMLCanvasElement
     this.backstage = document.getElementById('backstage') as HTMLCanvasElement
-    this.animation = new Animation(this.render)
-    this.state = state
-  }
-
-  private render(frame: number): void {
-    frame % 60 === 0
-      ? () => {
-          console.log(frame)
-        }
-      : null
-  }
-
-  public init() {
     this.panel.width = WIDTH
     this.panel.height = HEIGHT
     this.stage.width = WIDTH
     this.stage.height = HEIGHT
     this.backstage.width = WIDTH
     this.backstage.height = HEIGHT
-    this.animationStream = this.animation.animationStream
+
+    this.state = state
+    this.state.observe(this.bar)
+    this.animation = new Animation()
+    this.animation.start(this.foo)
+  }
+
+  private foo = (frame: number): void => {
+    frame % 120 === 0
+      ? this.state.changeState({
+          name: 'score',
+          value: frame,
+        })
+      : null
+  }
+
+  private bar = (nextState: StateType): void => {
+    console.log(nextState)
   }
 
   public drowPanel(text: string): void {

@@ -11,30 +11,34 @@ type StateChanges = {
   value: string | number | boolean
 }
 
-type StateType = {
-  snake: Coordinates[]
-  prey: Coordinates
+export type StateType = {
+  snake?: Coordinates[]
+  prey?: Coordinates
   score: number
 }
 
-export interface StateInterface<T> {
-  subscribe(observer: T): Subscription
+export interface StateInterface {
+  observe(observer): void
+  changeState(chanages: StateChanges): void
 }
 
-export class State<T> implements StateInterface<T> {
-  private currentState: StateType
-  private state //TODO: type?
+export class State implements StateInterface {
+  private state: StateType
+  private subject
 
-  constructor(observer) {
-    //TODO: initial state
-    this.state = new Subject()
+  constructor() {
+    this.state = {
+      score: 0,
+    }
+    this.subject = new Subject()
   }
 
-  public subscribe(observer: T): Subscription {
-    return this.state.subscribe(observer)
+  public observe(observer): void {
+    this.subject.subscribe(observer)
   }
 
   public changeState(changes: StateChanges): void {
-    //TODO: change state in subject
+    this.state[changes.name] = changes.value
+    this.subject.next(this.state)
   }
 }

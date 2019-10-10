@@ -16,7 +16,6 @@ export class Game {
   }
 
   public init(): void {
-    this.render.init()
     this.render.drowGrid()
     this.render.drowPanel('Press X to win')
   }

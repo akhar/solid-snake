@@ -30,7 +30,10 @@ function drowTriangleAtPoint(
   color: string
 ): void {
   const stage = canvas.getContext('2d') as CanvasRenderingContext2D
-  const orientedCoordinate: number = orientation === Orient.DOWN ? y + H : y - H
+  const orientedCoordinate: number =
+    orientation === Orient.DOWN
+      ? y + H
+      : y - H
 
   const triangle = new Path2D()
   triangle.moveTo(x, y)

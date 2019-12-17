@@ -1,6 +1,6 @@
 import { TRIANGLES } from './cfg'
 import { Render } from './render/render'
-import { State, StateInterface } from './state'
+import { State, StateInterface } from './state/state'
 
 function makeRandomUpTo(limit: number): number {
   return Math.floor(Math.random() * limit + 1)
@@ -17,16 +17,20 @@ export class Game {
 
   public init(): void {
     this.render.drowGrid()
-    this.render.drowPanel('Press X to win')
+    // this.render.drowPanel('Press X to win')
+    // this.showBackgroundArt()
   }
 
   private showBackgroundArt(): void {
-    for (let index = 0; index < 500; index++) {
-      this.render.drowTriangle(
-        makeRandomUpTo(TRIANGLES),
-        makeRandomUpTo(TRIANGLES * 2 - 1),
-        'NavajoWhite'
-      )
-    }
+    setInterval(() => {
+      this.render.clearStage()
+      for (let index = 0; index < 500; index++) {
+        this.render.drowTriangle(
+          makeRandomUpTo(TRIANGLES),
+          makeRandomUpTo(TRIANGLES * 2 - 1),
+          'NavajoWhite'
+        )
+      }
+    }, 360)
   }
 }

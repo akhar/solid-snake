@@ -2,14 +2,14 @@ import { clearPanelOnCanvas, drowPanelOnCanvas } from './panel'
 import { drowGridOnCanvas } from './grid'
 import { drowTriangleOnCanvas, clearStageOnCanvas } from './stage'
 import { WIDTH, HEIGHT } from '../cfg'
-import { Animation } from './animation'
-import { StateType, StateInterface } from '../state'
+import { AnimationClock } from './animation'
+import { StateType, StateInterface } from '../state/state'
 
 export class Render {
   private panel: HTMLCanvasElement
   private stage: HTMLCanvasElement
   private backstage: HTMLCanvasElement
-  private animation: Animation
+  private animation: AnimationClock
   private state: StateInterface
 
   constructor(state: StateInterface) {
@@ -24,22 +24,26 @@ export class Render {
     this.backstage.height = HEIGHT
 
     this.state = state
-    this.state.observe(this.bar)
-    this.animation = new Animation()
-    this.animation.start(this.foo)
+    this.state.observe(this.renderCurrentState)
+    this.animation = new AnimationClock()
+
   }
 
-  private foo = (frame: number): void => {
-    frame % 120 === 0
-      ? this.state.changeState({
-          name: 'score',
-          value: frame,
-        })
-      : null
-  }
+  // every time animation clock tik engine render the state
+  // every time game clock tik logic change the state
 
-  private bar = (nextState: StateType): void => {
-    console.log(nextState)
+
+  // private debug = (frame: number): void => {
+  //   frame % 120 === 0
+  //     ? this.state.changeState({
+  //         name: 'frame',
+  //         value: frame,
+  //       })
+  //     : null
+  // }
+
+  private renderCurrentState = (nextState: StateType): void => {
+    // console.log(nextState)
   }
 
   public drowPanel(text: string): void {

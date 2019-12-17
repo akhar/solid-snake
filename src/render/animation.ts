@@ -1,19 +1,19 @@
 import { ANIMATION_FREQ } from '../cfg'
 import { interval, Subscription } from 'rxjs'
 
-export interface Animation {
+export interface AnimationClock {
   animationStream: Subscription
-  start(observer): void
+  start(render): void
   stop(): void
 }
 
-export class Animation implements Animation {
+export class AnimationClock implements AnimationClock {
   private animationIntrval: number = 1000 / ANIMATION_FREQ // from Hz to intrval of milliseconds
 
   public animationStream: Subscription
 
-  public start(observer): void {
-    this.animationStream = interval(this.animationIntrval).subscribe(observer)
+  public start(render): void {
+    this.animationStream = interval(this.animationIntrval).subscribe(render)
   }
 
   public stop(): void {

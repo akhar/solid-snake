@@ -1,36 +1,19 @@
 import { fromEvent, Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
-export class Controller {
-  public init() {
-    const eventSource = fromEvent(document, 'keydown') as Observable<KeyboardEvent>
-
-    eventSource.pipe(map((event: KeyboardEvent) => event.code)).subscribe(this.handleKeyDown)
-  }
-
-  private handleKeyDown(key: KeyboardEvent['code']) {
-    console.debug(`${key} has pressed`)
-    switch (key) {
-      case 'ArrowUp':
-       
-        break
-      case 'ArrowDown':
-       
-        break
-      case 'ArrowLeft':
-       
-        break
-      case 'ArrowRight':
-       
-        break
-      case 'KeyX':
-       
-        break
-      case 'Escape':
-       
-        break
-    }
-  }
+export interface Controller {
+  eventSourct: Observable<KeyboardEvent>
+  start(handler: Function): void
 }
 
+export class Controller implements Controller {
+  private eventSource: Observable<KeyboardEvent>
 
+  constructor() {
+    this.eventSource = fromEvent(document, 'keydown') as Observable<KeyboardEvent>
+  }
+
+  public start(handler): void {
+    this.eventSource.pipe(map((event: KeyboardEvent) => event.code)).subscribe(handler)
+  }
+}

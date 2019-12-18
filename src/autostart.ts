@@ -1,9 +1,14 @@
-import { Game } from './game'
 import { Controller } from './controller'
+import { Game } from './game'
+import { AnimationClock } from './render/animation'
+import { Render } from './render/render'
+import { State } from './state'
 
 window.onload = (): void => {
-  const game = new Game()
+  const render = new Render()
+  const state = new State()
+  const animation = new AnimationClock()
   const controller = new Controller()
-  game.init()
-  controller.init()
+  
+  new Game(render, state, animation, controller)
 }

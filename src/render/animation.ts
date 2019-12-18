@@ -1,9 +1,9 @@
-import { ANIMATION_FREQ } from '../cfg'
 import { interval, Subscription } from 'rxjs'
+import { ANIMATION_FREQ } from '../cfg'
 
 export interface AnimationClock {
   animationStream: Subscription
-  start(render): void
+  start(render: Function): void
   stop(): void
 }
 

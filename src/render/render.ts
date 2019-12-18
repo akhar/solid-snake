@@ -1,68 +1,57 @@
-import { clearPanelOnCanvas, drowPanelOnCanvas } from './panel'
+import { HEIGHT, WIDTH } from '../cfg'
+import { Coordinates, Model } from '../state'
 import { drowGridOnCanvas } from './grid'
-import { drowTriangleOnCanvas, clearStageOnCanvas } from './stage'
-import { WIDTH, HEIGHT } from '../cfg'
-import { AnimationClock } from './animation'
-import { StateType, StateInterface } from '../state/state'
+import { clearPanelOnCanvas, drowPanelOnCanvas } from './panel'
+import { clearStageOnCanvas, drowTriangleOnCanvas } from './stage'
 
-export class Render {
+export interface Render {
+  renderModel(model: Model): void
+}
+
+export class Render implements Render {
   private panel: HTMLCanvasElement
   private stage: HTMLCanvasElement
   private backstage: HTMLCanvasElement
-  private animation: AnimationClock
-  private state: StateInterface
 
-  constructor(state: StateInterface) {
+  constructor() {
     this.panel = document.getElementById('panel') as HTMLCanvasElement
-    this.stage = document.getElementById('stage') as HTMLCanvasElement
-    this.backstage = document.getElementById('backstage') as HTMLCanvasElement
     this.panel.width = WIDTH
     this.panel.height = HEIGHT
+
+    this.stage = document.getElementById('stage') as HTMLCanvasElement
     this.stage.width = WIDTH
     this.stage.height = HEIGHT
+
+    this.backstage = document.getElementById('backstage') as HTMLCanvasElement
     this.backstage.width = WIDTH
     this.backstage.height = HEIGHT
 
-    this.state = state
-    this.state.observe(this.renderCurrentState)
-    this.animation = new AnimationClock()
-
+    this.drowGrid()
   }
 
-  // every time animation clock tik engine render the state
-  // every time game clock tik logic change the state
-
-
-  // private debug = (frame: number): void => {
-  //   frame % 120 === 0
-  //     ? this.state.changeState({
-  //         name: 'frame',
-  //         value: frame,
-  //       })
-  //     : null
-  // }
-
-  private renderCurrentState = (nextState: StateType): void => {
-    // console.log(nextState)
+  public renderModel(model: Model): void {
+    const snake: Coordinates[] = model.snake
+    const [head, ...tail] = snake
+    this.drowTriangle(head.row, head.column, head.color)
   }
 
-  public drowPanel(text: string): void {
+  private drowPanel(text: string): void {
     drowPanelOnCanvas(this.panel, text)
   }
 
-  public clearPanel(): void {
+  private clearPanel(): void {
     clearPanelOnCanvas(this.panel)
   }
 
-  public drowGrid(): void {
+  private drowGrid(): void {
     drowGridOnCanvas(this.backstage)
   }
 
-  public drowTriangle(row: number, column: number, color: string): void {
+  private drowTriangle(row: number, column: number, color: string): void {
     drowTriangleOnCanvas(this.stage, row, column, color)
   }
 
-  public clearStage(): void {
+  private clearStage(): void {
     clearStageOnCanvas(this.stage)
   }
 }

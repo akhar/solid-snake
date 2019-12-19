@@ -20,3 +20,4 @@ export class Game {
     })
   }
 }
+// TODO: game logic steps here — make model output from input

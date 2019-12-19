@@ -8,13 +8,37 @@ export type Coordinates = {
 
 type StateChanges = {
   name: string
-  value: string | number | boolean | Coordinates[]
+  value: string | number | boolean | Coordinates[] | ActiveKeys
+}
+
+type ActiveKeys = {
+  ArrowLeft: boolean
+  ArrowUp: boolean
+  ArrowRight: boolean
+  ArrowDown: boolean
+}
+
+export enum Direction {
+  LEFT,
+  L_UP,
+  R_UP,
+  RIGHT,
+  R_DOWN,
+  L_DOWN,
 }
 
 export type Model = {
-  snake?: Coordinates[]
+  input: Input
+  output: Output
+}
+
+type Output = {
+  snake: Coordinates[]
   prey?: Coordinates
   score: number
+}
+
+type Input = {
   activeKeys: {
     ArrowLeft: boolean
     ArrowUp: boolean
@@ -34,20 +58,24 @@ export class State implements State {
 
   constructor() {
     this.model = {
-      score: 0,
-      activeKeys: {
-        ArrowLeft: false,
-        ArrowUp: false,
-        ArrowRight: false,
-        ArrowDown: false,
-      },
-      snake: [
-        {
-          row: 6,
-          column: 10,
-          color: 'darkgreen',
+      input: {
+        activeKeys: {
+          ArrowLeft: false,
+          ArrowUp: false,
+          ArrowRight: false,
+          ArrowDown: false,
         },
-      ],
+      },
+      output: {
+        score: 0,
+        snake: [
+          {
+            row: 13,
+            column: 13,
+            color: 'darkgreen',
+          },
+        ],
+      },
     }
     this.subject = new Subject()
   }

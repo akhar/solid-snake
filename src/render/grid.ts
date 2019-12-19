@@ -1,4 +1,4 @@
-import { HEIGHT, WIDTH, H, B, GRID_COLOR } from '../cfg'
+import { B, GRID_COLOR, H, HEIGHT, WIDTH } from '../cfg'
 
 export function drowGridOnCanvas(canvas: HTMLCanvasElement): void {
   const backstage = canvas.getContext('2d') as CanvasRenderingContext2D

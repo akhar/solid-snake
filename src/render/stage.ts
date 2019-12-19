@@ -1,4 +1,4 @@
-import { H, B, WIDTH, HEIGHT } from '../cfg'
+import { B, H, HEIGHT, WIDTH } from '../cfg'
 
 export enum Orient {
   DOWN,
@@ -14,7 +14,9 @@ export function drowTriangleOnCanvas(
   const isRowOdd: boolean = row % 2 === 0
   const isColumnOdd: boolean = column % 2 === 0
   const orientation: Orient =
-    (isRowOdd && isColumnOdd) || (!isRowOdd && !isColumnOdd) ? Orient.DOWN : Orient.UP
+    (isRowOdd && isColumnOdd) || (!isRowOdd && !isColumnOdd)
+      ? Orient.DOWN
+      : Orient.UP
 
   const x: number = ((column - 1) / 2) * B
   const y: number = orientation === Orient.DOWN ? (row - 1) * H : row * H
@@ -30,10 +32,7 @@ function drowTriangleAtPoint(
   color: string
 ): void {
   const stage = canvas.getContext('2d') as CanvasRenderingContext2D
-  const orientedCoordinate: number =
-    orientation === Orient.DOWN
-      ? y + H
-      : y - H
+  const orientedCoordinate: number = orientation === Orient.DOWN ? y + H : y - H
 
   const triangle = new Path2D()
   triangle.moveTo(x, y)

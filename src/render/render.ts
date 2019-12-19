@@ -30,9 +30,14 @@ export class Render implements Render {
   }
 
   public renderModel(model: Model): void {
+    // TODO: Regulate speed of game by taking changes
+    // of state only when need to change view on screen
+    this.clearStage()
     const snake: Coordinates[] = model.snake
-    const [head, ...tail] = snake
-    this.drowTriangle(head.row, head.column, head.color)
+    // const [head, ...tail] = snake
+    snake.forEach((tale: Coordinates) =>
+      this.drowTriangle(tale.row, tale.column, tale.color)
+    )
   }
 
   private drowPanel(text: string): void {

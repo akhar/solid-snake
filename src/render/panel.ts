@@ -1,6 +1,9 @@
-import { B, H, GRID_COLOR, PANEL_FONT } from '../cfg'
+import { B, GRID_COLOR, H, PANEL_FONT } from '../cfg'
 
-export function drowPanelOnCanvas(canvas: HTMLCanvasElement, text: string): void {
+export function drowPanelOnCanvas(
+  canvas: HTMLCanvasElement,
+  text: string
+): void {
   const panel = canvas.getContext('2d') as CanvasRenderingContext2D
   const background = new Path2D()
 

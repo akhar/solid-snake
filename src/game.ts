@@ -40,7 +40,7 @@ export class Game {
     const newTail: Coordinates[] = snake.slice(0, snake.length - 1)
     const newHead: Coordinates = this.makeNewHead(head, direction)
     const newSnake: Coordinates[] = [newHead, ...newTail]
-    console.debug(newSnake)
+
     this.state.changeState({ name: 'snake', value: newSnake })
   }
 
@@ -53,20 +53,32 @@ export class Game {
 
     if (headOrientation === Orient.DOWN) {
       switch (direction) {
-        case Direction.LEFT || Direction.L_DOWN:
+        case Direction.LEFT:
           return { ...head, row, column: column - 1 }
-        case Direction.L_UP || Direction.R_UP:
+        case Direction.L_DOWN:
+          return { ...head, row, column: column - 1 }
+        case Direction.L_UP:
           return { ...head, row: row - 1, column }
-        case Direction.RIGHT || Direction.R_DOWN:
+        case Direction.R_UP:
+          return { ...head, row: row - 1, column }
+        case Direction.RIGHT:
+          return { ...head, row, column: column + 1 }
+        case Direction.R_DOWN:
           return { ...head, row, column: column + 1 }
       }
     } else {
       switch (direction) {
-        case Direction.LEFT || Direction.L_UP:
+        case Direction.LEFT:
           return { ...head, row, column: column - 1 }
-        case Direction.RIGHT || Direction.R_UP:
+        case Direction.L_UP:
+          return { ...head, row, column: column - 1 }
+        case Direction.RIGHT:
           return { ...head, row, column: column + 1 }
-        case Direction.L_DOWN || Direction.R_DOWN:
+        case Direction.R_UP:
+          return { ...head, row, column: column + 1 }
+        case Direction.L_DOWN:
+          return { ...head, row: row + 1, column }
+        case Direction.R_DOWN:
           return { ...head, row: row + 1, column }
       }
     }

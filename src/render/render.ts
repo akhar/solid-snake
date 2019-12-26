@@ -32,9 +32,13 @@ export class Render implements Render {
   public renderModel(model: Model): void {
     this.clearStage()
 
-    model.snake.forEach((tile: Coordinates) =>
-      this.drowTriangle(tile.row, tile.column, tile.color)
-    )
+    model.snake.forEach((tile: Coordinates, index: number) => {
+      if (index === 0) {
+        this.drowTriangle(tile.row, tile.column, tile.color, true)
+      } else {
+        this.drowTriangle(tile.row, tile.column, tile.color)
+      }
+    })
   }
 
   private drowPanel(text: string): void {
@@ -49,8 +53,13 @@ export class Render implements Render {
     drowGridOnCanvas(this.backstage)
   }
 
-  private drowTriangle(row: number, column: number, color: string): void {
-    drowTriangleOnCanvas(this.stage, row, column, color)
+  private drowTriangle(
+    row: number,
+    column: number,
+    color: string,
+    hasDot?: boolean
+  ): void {
+    drowTriangleOnCanvas(this.stage, row, column, color, hasDot)
   }
 
   private clearStage(): void {

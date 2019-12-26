@@ -60,6 +60,21 @@ export class State implements State {
       snake: [
         {
           row: 21,
+          column: 26,
+          color: 'darkgreen',
+        },
+        {
+          row: 21,
+          column: 25,
+          color: 'darkgreen',
+        },
+        {
+          row: 21,
+          column: 24,
+          color: 'darkgreen',
+        },
+        {
+          row: 21,
           column: 23,
           color: 'darkgreen',
         },

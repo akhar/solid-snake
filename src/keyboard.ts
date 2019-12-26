@@ -1,6 +1,6 @@
 import { fromEvent, Observable } from 'rxjs'
 import { filter, map } from 'rxjs/operators'
-import { Coordinates, Direction, Model, State } from './state'
+import { Model, State } from './state'
 
 enum Keys {
   ArrowLeft,
@@ -42,33 +42,18 @@ export class Controller {
   private handleKeyDown = (key: KeyboardEvent['code']) => {
     this.state.changeState({
       name: 'activeKeys',
-      value: { ...this.model.input.activeKeys, [key]: true },
+      value: { ...this.model.activeKeys, [key]: true },
     })
   }
 
   private handleKeyUp = (key: KeyboardEvent['code']) => {
     this.state.changeState({
       name: 'activeKeys',
-      value: { ...this.model.input.activeKeys, [key]: false },
+      value: { ...this.model.activeKeys, [key]: false },
     })
   }
 
   private filterKeys(code: string): boolean {
     return Object.keys(Keys).includes(code) ? true : false
-  }
-
-  private moveHorizontal = (direction: Direction): void => {
-    const snake: Coordinates[] = this.model.output.snake.map(t => {
-      return {
-        row: t.row,
-        column: direction === Direction.RIGHT ? t.column + 1 : t.column - 1,
-        color: t.color,
-      }
-    })
-
-    this.state.changeState({
-      name: 'snake',
-      value: snake,
-    })
   }
 }

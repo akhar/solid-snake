@@ -1,6 +1,6 @@
 import { AnimationClock } from './animation'
-import { Controller } from './controller'
 import { Game } from './game'
+import { Controller } from './keyboard'
 import { Render } from './render/render'
 import { State } from './state'
 

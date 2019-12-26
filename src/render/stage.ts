@@ -1,4 +1,5 @@
 import { B, H, HEIGHT, WIDTH } from '../cfg'
+import { whatOrientation } from '../utils'
 
 export enum Orient {
   DOWN,
@@ -11,13 +12,7 @@ export function drowTriangleOnCanvas(
   column: number,
   color: string
 ): void {
-  const isRowOdd: boolean = row % 2 === 0
-  const isColumnOdd: boolean = column % 2 === 0
-  const orientation: Orient =
-    (isRowOdd && isColumnOdd) || (!isRowOdd && !isColumnOdd)
-      ? Orient.DOWN
-      : Orient.UP
-
+  const orientation: Orient = whatOrientation(row, column)
   const x: number = ((column - 1) / 2) * B
   const y: number = orientation === Orient.DOWN ? (row - 1) * H : row * H
 

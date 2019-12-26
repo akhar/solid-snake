@@ -11,7 +11,7 @@ type StateChanges = {
   value: string | number | boolean | Coordinates[] | ActiveKeys
 }
 
-type ActiveKeys = {
+export type ActiveKeys = {
   ArrowLeft: boolean
   ArrowUp: boolean
   ArrowRight: boolean
@@ -28,17 +28,9 @@ export enum Direction {
 }
 
 export type Model = {
-  input: Input
-  output: Output
-}
-
-type Output = {
   snake: Coordinates[]
   prey?: Coordinates
   score: number
-}
-
-type Input = {
   activeKeys: {
     ArrowLeft: boolean
     ArrowUp: boolean
@@ -58,30 +50,36 @@ export class State implements State {
 
   constructor() {
     this.model = {
-      input: {
-        activeKeys: {
-          ArrowLeft: false,
-          ArrowUp: false,
-          ArrowRight: false,
-          ArrowDown: false,
+      activeKeys: {
+        ArrowLeft: false,
+        ArrowUp: false,
+        ArrowRight: false,
+        ArrowDown: false,
+      },
+      score: 0,
+      snake: [
+        {
+          row: 21,
+          column: 23,
+          color: 'darkgreen',
         },
-      },
-      output: {
-        score: 0,
-        snake: [
-          {
-            row: 13,
-            column: 13,
-            color: 'darkgreen',
-          },
-        ],
-      },
+        {
+          row: 21,
+          column: 22,
+          color: 'darkgreen',
+        },
+        {
+          row: 21,
+          column: 21,
+          color: 'darkgreen',
+        },
+      ],
     }
     this.subject = new Subject()
   }
 
-  public observe(getState): void {
-    this.subject.subscribe(getState)
+  public observe(onModelChange): void {
+    this.subject.subscribe(onModelChange)
     this.subject.next(this.model)
   }
 

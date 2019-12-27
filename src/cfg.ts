@@ -1,11 +1,11 @@
-import { Direction } from './state'
+import { Direction } from './direction'
 
 export const B: number = 30 // base — side of a triangle
 export const TRIANGLES: number = 30 // amount of trangles in a row
 export const GRID_COLOR: string = 'LightSkyBlue'
 export const GAME_FREQ: number = 1 // Hz
 export const ANIMATION_FREQ: number = 60 //Hz
-export const GAME_SPEED: number = 2 //Hz
+export const GAME_SPEED: number = 10 //Hz
 export const PANEL_FONT: string = 'italic 1em "Fira Sans", serif'
 export const DEFAULT_DIRECTION: Direction = Direction.RIGHT
 export const BACKGROUND_COLOR: string = 'white'

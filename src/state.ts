@@ -1,4 +1,6 @@
 import { Subject } from 'rxjs'
+import { DEFAULT_DIRECTION } from './cfg'
+import { Direction } from './direction'
 
 export type Coordinates = {
   row: number
@@ -18,15 +20,6 @@ export type ActiveKeys = {
   ArrowDown: boolean
 }
 
-export enum Direction {
-  LEFT,
-  L_UP,
-  R_UP,
-  RIGHT,
-  R_DOWN,
-  L_DOWN,
-}
-
 export type Model = {
   snake: Coordinates[]
   prey?: Coordinates
@@ -37,6 +30,7 @@ export type Model = {
     ArrowRight: boolean
     ArrowDown: boolean
   }
+  lastDirection: Direction
 }
 
 export interface State {
@@ -57,6 +51,7 @@ export class State implements State {
         ArrowDown: false,
       },
       score: 0,
+      lastDirection: DEFAULT_DIRECTION,
       snake: [
         {
           row: 21,
@@ -90,6 +85,7 @@ export class State implements State {
         },
       ],
     }
+
     this.subject = new Subject()
   }
 

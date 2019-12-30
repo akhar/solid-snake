@@ -24,13 +24,9 @@ export type Model = {
   snake: Coordinates[]
   prey?: Coordinates
   score: number
-  activeKeys: {
-    ArrowLeft: boolean
-    ArrowUp: boolean
-    ArrowRight: boolean
-    ArrowDown: boolean
-  }
+  activeKeys: ActiveKeys
   lastDirection: Direction
+  isRunning: boolean
 }
 
 export interface State {
@@ -44,6 +40,7 @@ export class State implements State {
 
   constructor() {
     this.model = {
+      isRunning: true,
       activeKeys: {
         ArrowLeft: false,
         ArrowUp: false,

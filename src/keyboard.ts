@@ -7,6 +7,7 @@ enum Keys {
   ArrowUp,
   ArrowRight,
   ArrowDown,
+  Space,
 }
 
 export class Controller {
@@ -47,6 +48,12 @@ export class Controller {
   }
 
   private handleKeyUp = (key: KeyboardEvent['code']) => {
+    if (key === 'Space') {
+      this.state.changeState({
+        name: 'isRunning',
+        value: !this.model.isRunning,
+      })
+    }
     this.state.changeState({
       name: 'activeKeys',
       value: { ...this.model.activeKeys, [key]: false },

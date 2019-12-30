@@ -29,27 +29,36 @@ export class Game {
   private model: Model
   private gameInterval: number = 1000 / GAME_SPEED // from Hz to intrval
   private directions: Directions
-  public gameStream: Subscription
+  private gameStream: Subscription
 
   public startGame = (): void => {
     this.gameStream = interval(this.gameInterval).subscribe(this.game)
   }
 
+  private stopGame = (): void => {
+    this.gameStream.unsubscribe()
+  }
+
   private game = (): void => {
-    this.moveSnake()
+    if (this.model.isRunning) {
+      this.moveSnake()
+    } else {
+      this.stopGame()
+    }
   }
 
   private moveSnake = (): void => {
     const snake: Coordinates[] = this.model.snake
     const head: Coordinates = snake[0]
+    const neck: Coordinates = snake[1]
     const direction: Direction = this.directions.getDirection(
       this.model.activeKeys
     )
     const newTail: Coordinates[] = snake.slice(0, snake.length - 1)
     const newHead: Coordinates = this.makeNewHead(head, direction)
 
-    const isDirectionWrong: boolean = compareCoordinates(head, newHead)
-    //TODO: Why this shit isn't working preventing reverse movement?
+    const isDirectionWrong: boolean = compareCoordinates(neck, newHead)
+
     const newHeadCorected = isDirectionWrong
       ? this.makeNewHead(head, this.model.lastDirection)
       : newHead

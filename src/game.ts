@@ -18,9 +18,13 @@ export class Game {
 
     animationClock.start((frame: number): void => {
       this.render.renderModel(this.model)
+      if (!Boolean(this.gameStream) && this.model.isRunning) {
+        this.startGame()
+      } else if (Boolean(this.gameStream) && !this.model.isRunning) {
+        this.stopGame()
+      }
     })
 
-    this.startGame()
     this.directions = new Directions(this.state)
   }
 
@@ -37,14 +41,11 @@ export class Game {
 
   private stopGame = (): void => {
     this.gameStream.unsubscribe()
+    this.gameStream = undefined
   }
 
   private game = (): void => {
-    if (this.model.isRunning) {
-      this.moveSnake()
-    } else {
-      this.stopGame()
-    }
+    this.moveSnake()
   }
 
   private moveSnake = (): void => {

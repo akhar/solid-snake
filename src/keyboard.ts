@@ -10,7 +10,7 @@ enum Keys {
   Space,
 }
 
-export class Controller {
+export class Keyboard {
   private keysDowns: Observable<KeyboardEvent>
   private keysUps: Observable<KeyboardEvent>
   private model: Model

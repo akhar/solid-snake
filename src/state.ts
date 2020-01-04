@@ -40,7 +40,7 @@ export class State implements State {
 
   constructor() {
     this.model = {
-      isRunning: true,
+      isRunning: false,
       activeKeys: {
         ArrowLeft: false,
         ArrowUp: false,

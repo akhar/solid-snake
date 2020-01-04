@@ -1,6 +1,6 @@
 import { AnimationClock } from './animation'
 import { Game } from './game'
-import { Controller } from './keyboard'
+import { Keyboard } from './keyboard'
 import { Render } from './render/render'
 import { State } from './state'
 
@@ -10,5 +10,5 @@ window.onload = (): void => {
   const animation = new AnimationClock()
 
   new Game(render, state, animation)
-  new Controller(state)
+  new Keyboard(state)
 }

@@ -1,4 +1,4 @@
-import { HEIGHT, WIDTH } from '../cfg'
+import { FOOD_COLOR, HEIGHT, SNAKE_COLOR, WIDTH } from '../cfg'
 import { Coordinates, Model } from '../state'
 import { drowGridOnCanvas } from './grid'
 import { clearPanelOnCanvas, drowPanelOnCanvas } from './panel'
@@ -30,15 +30,17 @@ export class Render implements Render {
   }
 
   public renderModel(model: Model): void {
+    const { food, snake } = model
     this.clearStage()
 
-    model.snake.forEach((tile: Coordinates, index: number) => {
+    snake.forEach((tile: Coordinates, index: number) => {
       if (index === 0) {
-        this.drowTriangle(tile.row, tile.column, tile.color, true)
+        this.drowTriangle({ ...tile, color: SNAKE_COLOR, hasDot: true })
       } else {
-        this.drowTriangle(tile.row, tile.column, tile.color)
+        this.drowTriangle({ ...tile, color: SNAKE_COLOR })
       }
     })
+    this.drowTriangle({ ...food, color: FOOD_COLOR })
   }
 
   private drowPanel(text: string): void {
@@ -53,12 +55,13 @@ export class Render implements Render {
     drowGridOnCanvas(this.backstage)
   }
 
-  private drowTriangle(
-    row: number,
-    column: number,
-    color: string,
+  private drowTriangle(tile: {
+    row: number
+    column: number
+    color?: string
     hasDot?: boolean
-  ): void {
+  }): void {
+    const { row, column, color, hasDot } = tile
     drowTriangleOnCanvas(this.stage, row, column, color, hasDot)
   }
 

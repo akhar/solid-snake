@@ -1,11 +1,15 @@
 import { interval, Subscription } from 'rxjs'
 import { AnimationClock } from './animation'
-import { GAME_SPEED } from './cfg'
+import { GAME_SPEED, GRID_HEIGHT, GRID_WIDTH } from './cfg'
 import { Direction, Directions } from './direction'
 import { Render } from './render/render'
 import { Orient } from './render/stage'
 import { Coordinates, Model, State } from './state'
-import { compareCoordinates, getOrientation } from './utils'
+import {
+  compareCoordinates,
+  getOrientation,
+  makeWholeRandomUpTo,
+} from './utils'
 
 export class Game {
   constructor(render: Render, state: State, animationClock: AnimationClock) {
@@ -26,6 +30,8 @@ export class Game {
     })
 
     this.directions = new Directions(this.state)
+
+    this.placeFood()
   }
 
   private render: Render
@@ -45,7 +51,23 @@ export class Game {
   }
 
   private game = (): void => {
-    this.moveSnake()
+    if (this.isGameOver()) {
+      this.stopGame()
+    } else {
+      this.moveSnake()
+    }
+  }
+
+  private isGameOver = (): boolean => {
+    return false
+  }
+
+  private placeFood = (): void => {
+    const row: number = makeWholeRandomUpTo(GRID_HEIGHT)
+    const column: number = makeWholeRandomUpTo(GRID_WIDTH)
+    const value: Coordinates = { row, column }
+    console.log(GRID_WIDTH, GRID_HEIGHT)
+    this.state.changeState({ name: 'food', value })
   }
 
   private moveSnake = (): void => {

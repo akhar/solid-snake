@@ -1,7 +1,7 @@
 import { Orient } from './render/stage'
 import { Coordinates } from './state'
 
-export function makeRandomUpTo(limit: number): number {
+export function makeWholeRandomUpTo(limit: number): number {
   return Math.floor(Math.random() * limit + 1)
 }
 

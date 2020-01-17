@@ -5,12 +5,11 @@ import { Direction } from './direction'
 export type Coordinates = {
   row: number
   column: number
-  color: string
 }
 
 type StateChanges = {
   name: string
-  value: string | number | boolean | Coordinates[] | ActiveKeys
+  value: string | number | boolean | Coordinates | Coordinates[] | ActiveKeys
 }
 
 export type ActiveKeys = {
@@ -22,7 +21,7 @@ export type ActiveKeys = {
 
 export type Model = {
   snake: Coordinates[]
-  prey?: Coordinates
+  food?: Coordinates
   score: number
   activeKeys: ActiveKeys
   lastDirection: Direction
@@ -53,32 +52,26 @@ export class State implements State {
         {
           row: 21,
           column: 26,
-          color: 'darkgreen',
         },
         {
           row: 21,
           column: 25,
-          color: 'darkgreen',
         },
         {
           row: 21,
           column: 24,
-          color: 'darkgreen',
         },
         {
           row: 21,
           column: 23,
-          color: 'darkgreen',
         },
         {
           row: 21,
           column: 22,
-          color: 'darkgreen',
         },
         {
           row: 21,
           column: 21,
-          color: 'darkgreen',
         },
       ],
     }

@@ -59,14 +59,36 @@ export class Game {
   }
 
   private isGameOver = (): boolean => {
+    const snake = this.model.snake
+    const head: Coordinates = snake[0]
+    const tail: Coordinates[] = snake.slice(1, snake.length)
+
+    if (this.isBorderCrossed(head)) return true
+    if (this.isSelfCrossed(head, tail)) return true
+
     return false
+  }
+
+  private isBorderCrossed = (head: Coordinates): boolean => {
+    const { row, column } = head
+    return row < 0 || row > GRID_HEIGHT || column < 0 || column > GRID_WIDTH
+  }
+
+  private isSelfCrossed = (head: Coordinates, tail: Coordinates[]): boolean => {
+    let result: boolean = false
+    tail.forEach((segment: Coordinates): void => {
+      if (segment.row === head.row && segment.column === head.column) {
+        result = true
+      }
+    })
+    return result
   }
 
   private placeFood = (): void => {
     const row: number = makeWholeRandomUpTo(GRID_HEIGHT)
     const column: number = makeWholeRandomUpTo(GRID_WIDTH)
     const value: Coordinates = { row, column }
-    console.log(GRID_WIDTH, GRID_HEIGHT)
+
     this.state.changeState({ name: 'food', value })
   }
 

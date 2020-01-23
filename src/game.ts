@@ -5,11 +5,7 @@ import { Direction, Directions } from './direction'
 import { Render } from './render/render'
 import { Orient } from './render/stage'
 import { Coordinates, Model, State } from './state'
-import {
-  compareCoordinates,
-  getOrientation,
-  makeWholeRandomUpTo,
-} from './utils'
+import { compareCoordinates, getOrientation, makeWholeRandomUpTo } from './utils'
 
 export class Game {
   constructor(render: Render, state: State, animationClock: AnimationClock) {
@@ -51,22 +47,7 @@ export class Game {
   }
 
   private game = (): void => {
-    if (this.isGameOver()) {
-      this.stopGame()
-    } else {
-      this.moveSnake()
-    }
-  }
-
-  private isGameOver = (): boolean => {
-    const snake = this.model.snake
-    const head: Coordinates = snake[0]
-    const tail: Coordinates[] = snake.slice(1, snake.length)
-
-    if (this.isBorderCrossed(head)) return true
-    if (this.isSelfCrossed(head, tail)) return true
-
-    return false
+    this.moveSnake()
   }
 
   private isBorderCrossed = (head: Coordinates): boolean => {
@@ -92,34 +73,35 @@ export class Game {
     this.state.changeState({ name: 'food', value })
   }
 
+  private isGameWillBeOver = (head: Coordinates, tail: Coordinates[]): boolean => {
+    if (this.isBorderCrossed(head)) return true
+    if (this.isSelfCrossed(head, tail)) return true
+  }
+
   private moveSnake = (): void => {
     const snake: Coordinates[] = this.model.snake
     const head: Coordinates = snake[0]
     const neck: Coordinates = snake[1]
-    const direction: Direction = this.directions.getDirection(
-      this.model.activeKeys
-    )
+    const direction: Direction = this.directions.getDirection(this.model.activeKeys)
     const newTail: Coordinates[] = snake.slice(0, snake.length - 1)
     const newHead: Coordinates = this.makeNewHead(head, direction)
 
     const isDirectionWrong: boolean = compareCoordinates(neck, newHead)
 
-    const newHeadCorected = isDirectionWrong
-      ? this.makeNewHead(head, this.model.lastDirection)
-      : newHead
+    const newHeadCorected = isDirectionWrong ? this.makeNewHead(head, this.model.lastDirection) : newHead
 
-    const newSnake: Coordinates[] = [newHeadCorected, ...newTail]
+    if (this.isGameWillBeOver(newHeadCorected, newTail)) {
+      this.stopGame()
+    } else {
+      const newSnake: Coordinates[] = [newHeadCorected, ...newTail]
 
-    !isDirectionWrong &&
-      this.state.changeState({ name: 'lastDirection', value: direction })
+      !isDirectionWrong && this.state.changeState({ name: 'lastDirection', value: direction })
 
-    this.state.changeState({ name: 'snake', value: newSnake })
+      this.state.changeState({ name: 'snake', value: newSnake })
+    }
   }
 
-  private makeNewHead = (
-    head: Coordinates,
-    direction: Direction
-  ): Coordinates => {
+  private makeNewHead = (head: Coordinates, direction: Direction): Coordinates => {
     const { row, column } = head
     const headOrientation: Orient = getOrientation(head.row, head.column)
 

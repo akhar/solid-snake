@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs'
 import { GRID_HEIGHT, GRID_WIDTH } from './cfg'
 import { Direction } from './direction'
-import { makeWholeRandomFromTo } from './utils'
+import { makeWholeRandomFromTo, makeWholeRandomUpTo } from './utils'
 
 export type Coordinates = {
   row: number
@@ -22,7 +22,7 @@ export type ActiveKeys = {
 
 export type Model = {
   snake: Coordinates[]
-  food?: Coordinates
+  food: Coordinates
   score: number
   activeKeys: ActiveKeys
   lastDirection?: Direction
@@ -56,6 +56,11 @@ export class State implements State {
           column: makeWholeRandomFromTo(5, GRID_WIDTH - 5),
         },
       ],
+      food: {
+        //TODO: do not interferate with snake
+        row: makeWholeRandomUpTo(GRID_HEIGHT),
+        column: makeWholeRandomUpTo(GRID_WIDTH),
+      },
     }
 
     this.subject = new Subject()

@@ -26,8 +26,6 @@ export class Game {
         this.stopGame()
       }
     })
-
-    this.placeFood()
   }
 
   private render: Render
@@ -70,8 +68,13 @@ export class Game {
     const row: number = makeWholeRandomUpTo(GRID_HEIGHT)
     const column: number = makeWholeRandomUpTo(GRID_WIDTH)
     const value: Coordinates = { row, column }
-
+    //TODO: do not interferate with snake
     this.state.changeState({ name: 'food', value })
+  }
+
+  private isFoodHasEated = (head: Coordinates): boolean => {
+    const food = this.model.food
+    return compareCoordinates(food, head)
   }
 
   private isGameWillBeOver = (head: Coordinates, tail?: Coordinates[]): boolean => {
@@ -91,11 +94,18 @@ export class Game {
       if (this.isGameWillBeOver(newHead)) {
         this.endGame()
       } else {
-        this.state.changeState({ name: 'snake', value: [newHead] })
+        if (this.isFoodHasEated(head)) {
+          this.state.changeState({ name: 'snake', value: [newHead, ...snake] })
+          this.placeFood()
+        } else {
+          this.state.changeState({ name: 'snake', value: [newHead] })
+        }
+        this.state.changeState({ name: 'lastDirection', value: direction })
       }
     } else {
       const neck: Coordinates = snake[1]
-      const newTail: Coordinates[] = snake.slice(0, snake.length - 1)
+      const newTail: Coordinates[] = this.isFoodHasEated(head) ? snake : snake.slice(0, snake.length - 1)
+      this.isFoodHasEated(head) && this.placeFood()
 
       const isDirectionWrong: boolean = compareCoordinates(neck, newHead)
       const newHeadCorected = isDirectionWrong ? this.makeNewHead(head, this.model.lastDirection) : newHead
@@ -106,7 +116,6 @@ export class Game {
         const newSnake: Coordinates[] = [newHeadCorected, ...newTail]
 
         !isDirectionWrong && this.state.changeState({ name: 'lastDirection', value: direction })
-
         this.state.changeState({ name: 'snake', value: newSnake })
       }
     }

@@ -26,8 +26,7 @@ export class Directions implements Directions {
   private state: State
 
   private updateLastDirection = (value: Direction): void => {
-    console.debug(value)
-    this.state.changeState({ name: 'lastDirection', value })
+    // this.state.changeState({ name: 'lastDirection', value })
   }
 
   public getRandomDirection = (): Direction => {

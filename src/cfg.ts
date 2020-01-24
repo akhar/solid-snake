@@ -1,4 +1,4 @@
-export const GRID_HEIGHT: number = 30 // trangles in a column
+export const GRID_HEIGHT: number = 20 // trangles in a column
 export const B: number = 30 // base side of a triangle in pixels
 export const GRID_COLOR: string = 'LightSkyBlue'
 export const GAME_FREQ: number = 2 // Hz

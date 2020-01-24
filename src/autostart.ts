@@ -13,7 +13,6 @@ window.onload = (): void => {
   const directions = new Directions(state)
 
   new Keyboard(state)
-
   new Game(render, state, animation, directions)
 
   const css = document.createElement('style')

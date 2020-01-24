@@ -1,6 +1,7 @@
 import { Subject } from 'rxjs'
-import { DEFAULT_DIRECTION } from './cfg'
+import { GRID_HEIGHT, GRID_WIDTH } from './cfg'
 import { Direction } from './direction'
+import { makeWholeRandomFromTo } from './utils'
 
 export type Coordinates = {
   row: number
@@ -24,8 +25,9 @@ export type Model = {
   food?: Coordinates
   score: number
   activeKeys: ActiveKeys
-  lastDirection: Direction
+  lastDirection?: Direction
   isRunning: boolean
+  isGameOver: boolean
 }
 
 export interface State {
@@ -40,6 +42,7 @@ export class State implements State {
   constructor() {
     this.model = {
       isRunning: false,
+      isGameOver: false,
       activeKeys: {
         ArrowLeft: false,
         ArrowUp: false,
@@ -47,31 +50,10 @@ export class State implements State {
         ArrowDown: false,
       },
       score: 0,
-      lastDirection: DEFAULT_DIRECTION,
       snake: [
         {
-          row: 21,
-          column: 26,
-        },
-        {
-          row: 21,
-          column: 25,
-        },
-        {
-          row: 21,
-          column: 24,
-        },
-        {
-          row: 21,
-          column: 23,
-        },
-        {
-          row: 21,
-          column: 22,
-        },
-        {
-          row: 21,
-          column: 21,
+          row: makeWholeRandomFromTo(5, GRID_HEIGHT - 5),
+          column: makeWholeRandomFromTo(5, GRID_WIDTH - 5),
         },
       ],
     }

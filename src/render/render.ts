@@ -12,6 +12,7 @@ export class Render implements Render {
   private panel: HTMLCanvasElement
   private stage: HTMLCanvasElement
   private backstage: HTMLCanvasElement
+  private info: HTMLElement
 
   constructor() {
     this.panel = document.getElementById('panel') as HTMLCanvasElement
@@ -25,6 +26,8 @@ export class Render implements Render {
     this.backstage = document.getElementById('backstage') as HTMLCanvasElement
     this.backstage.width = WIDTH
     this.backstage.height = HEIGHT
+
+    this.info = document.getElementById('info')
 
     this.drowGrid()
   }
@@ -41,6 +44,8 @@ export class Render implements Render {
       }
     })
     this.drowTriangle({ ...food, color: FOOD_COLOR })
+
+    this.info.innerHTML = `${model.snake.length - 1} pts. ${model.isGameOver ? 'Game over' : ''}`
   }
 
   private drowPanel(text: string): void {
@@ -55,12 +60,7 @@ export class Render implements Render {
     drowGridOnCanvas(this.backstage)
   }
 
-  private drowTriangle(tile: {
-    row: number
-    column: number
-    color?: string
-    hasDot?: boolean
-  }): void {
+  private drowTriangle(tile: { row: number; column: number; color?: string; hasDot?: boolean }): void {
     const { row, column, color, hasDot } = tile
     drowTriangleOnCanvas(this.stage, row, column, color, hasDot)
   }

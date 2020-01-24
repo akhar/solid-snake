@@ -6,19 +6,10 @@
   </head>
 
   <body>
-    <div id="info" style="height: 3rem;"></div>
-    <canvas
-      id="panel"
-      style="background-color: transparent; z-index: 2; position: absolute;"
-    ></canvas>
-    <canvas
-      id="stage"
-      style="background-color: transparent; z-index: 1; position: absolute;"
-    ></canvas>
-    <canvas
-      id="backstage"
-      style="background-color: transparent; z-index: 0; position: absolute;"
-    ></canvas>
+    <div id="info"></div>
+    <canvas id="panel" class="canvas" style="z-index: 2;"></canvas>
+    <canvas id="stage" class="canvas" style="z-index: 1;"></canvas>
+    <canvas id="backstage" class="canvas" style="z-index: 0;"></canvas>
     <script type="module" src="autostart.ts"></script>
   </body>
 </html>

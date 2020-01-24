@@ -36,6 +36,8 @@ export class Render implements Render {
     const { food, snake } = model
     this.clearStage()
 
+    this.drowTriangle({ ...food, color: FOOD_COLOR })
+
     snake.forEach((tile: Coordinates, index: number) => {
       if (index === 0) {
         this.drowTriangle({ ...tile, color: SNAKE_COLOR, hasDot: true })
@@ -43,9 +45,10 @@ export class Render implements Render {
         this.drowTriangle({ ...tile, color: SNAKE_COLOR })
       }
     })
-    this.drowTriangle({ ...food, color: FOOD_COLOR })
 
-    this.info.innerHTML = `${model.snake.length - 1} pts. ${model.isGameOver ? 'Game over' : ''}`
+    this.info.innerHTML = `${model.snake.length - 1} pts. ${model.seconds} sec.`
+
+    model.isGameOver && this.drowPanel('Game over')
   }
 
   private drowPanel(text: string): void {
@@ -60,7 +63,12 @@ export class Render implements Render {
     drowGridOnCanvas(this.backstage)
   }
 
-  private drowTriangle(tile: { row: number; column: number; color?: string; hasDot?: boolean }): void {
+  private drowTriangle(tile: {
+    row: number
+    column: number
+    color?: string
+    hasDot?: boolean
+  }): void {
     const { row, column, color, hasDot } = tile
     drowTriangleOnCanvas(this.stage, row, column, color, hasDot)
   }

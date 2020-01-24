@@ -28,6 +28,7 @@ export type Model = {
   lastDirection?: Direction
   isRunning: boolean
   isGameOver: boolean
+  seconds: number
 }
 
 export interface State {
@@ -41,6 +42,7 @@ export class State implements State {
 
   constructor() {
     this.model = {
+      seconds: 0,
       isRunning: false,
       isGameOver: false,
       activeKeys: {

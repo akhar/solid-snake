@@ -18,3 +18,7 @@ export function getOrientation(row: number, column: number): Orient {
 export function compareCoordinates(c1: Coordinates, c2: Coordinates): boolean {
   return c1.row === c2.row && c1.column === c2.column
 }
+
+export function isMobileDevice(): boolean {
+  return typeof window.orientation !== 'undefined' || navigator.userAgent.indexOf('IEMobile') !== -1
+}

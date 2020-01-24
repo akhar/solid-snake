@@ -9,7 +9,12 @@ import { compareCoordinates, getOrientation, makeWholeRandomUpTo } from './utils
 
 // TODO: mobile version with screen contriller
 export class Game {
-  constructor(render: Render, state: State, animationClock: AnimationClock, directions: Directions) {
+  constructor(
+    render: Render,
+    state: State,
+    animationClock: AnimationClock,
+    directions: Directions
+  ) {
     this.state = state
     this.render = render
     this.directions = directions
@@ -18,8 +23,9 @@ export class Game {
       this.model = model
     })
 
-    animationClock.start((frame: number): void => {
+    animationClock.start((): void => {
       this.render.renderModel(this.model)
+
       if (!Boolean(this.gameStream) && this.model.isRunning) {
         this.startGame()
       } else if (Boolean(this.gameStream) && !this.model.isRunning) {
@@ -45,13 +51,14 @@ export class Game {
     this.state.changeState({ name: 'isRunning', value: false })
   }
 
-  private game = (): void => {
+  private game = (step: number): void => {
+    step % GAME_SPEED === 0 && this.state.changeState({ name: 'seconds', value: step / GAME_SPEED })
     this.moveSnake()
   }
 
   private isBorderCrossed = (head: Coordinates): boolean => {
     const { row, column } = head
-    return row < 0 || row > GRID_HEIGHT || column < 0 || column > GRID_WIDTH
+    return row < 1 || row > GRID_HEIGHT || column < 1 || column > GRID_WIDTH
   }
 
   private isSelfCrossed = (head: Coordinates, tail: Coordinates[]): boolean => {
@@ -104,11 +111,15 @@ export class Game {
       }
     } else {
       const neck: Coordinates = snake[1]
-      const newTail: Coordinates[] = this.isFoodHasEated(head) ? snake : snake.slice(0, snake.length - 1)
+      const newTail: Coordinates[] = this.isFoodHasEated(head)
+        ? snake
+        : snake.slice(0, snake.length - 1)
       this.isFoodHasEated(head) && this.placeFood()
 
       const isDirectionWrong: boolean = compareCoordinates(neck, newHead)
-      const newHeadCorected = isDirectionWrong ? this.makeNewHead(head, this.model.lastDirection) : newHead
+      const newHeadCorected = isDirectionWrong
+        ? this.makeNewHead(head, this.model.lastDirection)
+        : newHead
 
       if (this.isGameWillBeOver(newHeadCorected, newTail)) {
         this.endGame()
@@ -122,8 +133,8 @@ export class Game {
   }
 
   private endGame = (): void => {
+    this.stopGame()
     this.state.changeState({ name: 'isGameOver', value: true })
-    this.stopGame
   }
 
   private makeNewHead = (head: Coordinates, direction: Direction): Coordinates => {

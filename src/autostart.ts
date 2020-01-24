@@ -1,5 +1,5 @@
 import { AnimationClock } from './animation'
-import { GRID_COLOR, SNAKE_COLOR, WIDTH } from './cfg'
+import { GRID_COLOR, PANEL_FONT, SNAKE_COLOR, WIDTH } from './cfg'
 import { Directions } from './direction'
 import { Game } from './game'
 import { Keyboard } from './keyboard'
@@ -21,15 +21,19 @@ window.onload = (): void => {
   const padding: string = '2rem'
 
   const styles = `
+    * {
+      margin: 0;
+      padding: 0;
+    }
     #info {
       height: 3rem;
       width: calc(${WIDTH}px - ${padding});
       color: ${SNAKE_COLOR};
-      font: italic 2rem 'Fira Sans', serif;
+      font: ${PANEL_FONT};
       background-color: ${GRID_COLOR};
       padding-left: ${padding};
       display: table-cell;
-      vertical-align: bottom;
+      vertical-align: middle;
     }
 
     .canvas {

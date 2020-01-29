@@ -81,7 +81,11 @@ export class Game {
 
   private isFoodHasEated = (head: Coordinates): boolean => {
     const food = this.model.food
-    return compareCoordinates(food, head)
+    if (compareCoordinates(food, head)) {
+      const value: Coordinates[] = [...this.model.eaten, head]
+      this.state.changeState({ name: 'eaten', value })
+      return true
+    }
   }
 
   private isGameWillBeOver = (head: Coordinates, tail?: Coordinates[]): boolean => {
@@ -130,6 +134,10 @@ export class Game {
         this.state.changeState({ name: 'snake', value: newSnake })
       }
     }
+    this.state.changeState({
+      name: 'eaten',
+      value: this.model.eaten.filter(foo => this.model.snake.includes(foo)),
+    })
   }
 
   private endGame = (): void => {

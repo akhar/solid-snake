@@ -1,4 +1,4 @@
-import { B, FOOD_COLOR, GRID_COLOR, H, PANEL_FONT } from '../cfg'
+import { B, FOOD_COLOR, H, HEIGHT, PANEL_FONT, WIDTH } from '../cfg'
 
 export function drowPanelOnCanvas(canvas: HTMLCanvasElement, text: string): void {
   const panel = canvas.getContext('2d') as CanvasRenderingContext2D
@@ -11,7 +11,7 @@ export function drowPanelOnCanvas(canvas: HTMLCanvasElement, text: string): void
   background.lineTo(2 * B, 12 * H) // bottom-left
   background.lineTo(1.5 * B, 11 * H) // far-left
 
-  panel.fillStyle = GRID_COLOR
+  panel.fillStyle = '#87cefaaa' //TODO: replace with animation
   panel.fill(background)
 
   panel.fillStyle = FOOD_COLOR
@@ -21,6 +21,5 @@ export function drowPanelOnCanvas(canvas: HTMLCanvasElement, text: string): void
 
 export function clearPanelOnCanvas(canvas: HTMLCanvasElement): void {
   const panel = canvas.getContext('2d') as CanvasRenderingContext2D
-  panel.fillStyle = 'transpanent'
-  panel.fill()
+  panel.clearRect(0, 0, WIDTH, HEIGHT)
 }

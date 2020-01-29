@@ -6,7 +6,7 @@ export const B: number = isMobileDevice()
   : GRID_HEIGHT * 2 // base side of a triangle in pixels
 export const GRID_COLOR: string = 'LightSkyBlue'
 export const ANIMATION_FREQ: number = 60 //Hz
-export const GAME_SPEED: number = 10 //Hz
+export const GAME_SPEED: number = 8 //Hz
 export const PANEL_FONT: string = '2rem "Fira code", serif'
 export const BACKGROUND_COLOR: string = 'white'
 export const SNAKE_COLOR: string = 'darkgreen'

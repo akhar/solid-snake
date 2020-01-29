@@ -8,6 +8,7 @@ enum Keys {
   ArrowRight,
   ArrowDown,
   Space,
+  Enter,
 }
 
 export class Keyboard {
@@ -48,6 +49,9 @@ export class Keyboard {
   }
 
   private handleKeyUp = (key: KeyboardEvent['code']) => {
+    if (key === 'Enter') {
+      this.state.initModel()
+    }
     if (key === 'Space') {
       this.state.changeState({
         name: 'isRunning',

@@ -23,6 +23,7 @@ export type ActiveKeys = {
 export type Model = {
   snake: Coordinates[]
   food: Coordinates
+  eaten: Coordinates[]
   score: number
   activeKeys: ActiveKeys
   lastDirection?: Direction
@@ -34,6 +35,7 @@ export type Model = {
 export interface State {
   observe(getState): void
   changeState(chanages: StateChanges): void
+  initModel(model: Model): void
 }
 
 export class State implements State {
@@ -41,6 +43,21 @@ export class State implements State {
   private subject: Subject<unknown>
 
   constructor() {
+    this.initModel()
+    this.subject = new Subject()
+  }
+
+  public observe(onModelChange): void {
+    this.subject.subscribe(onModelChange)
+    this.subject.next(this.model)
+  }
+
+  public changeState(changes: StateChanges): void {
+    this.model[changes.name] = changes.value
+    this.subject.next(this.model)
+  }
+
+  public initModel(): void {
     this.model = {
       seconds: 0,
       isRunning: false,
@@ -52,6 +69,7 @@ export class State implements State {
         ArrowDown: false,
       },
       score: 0,
+      eaten: [],
       snake: [
         {
           row: makeWholeRandomFromTo(5, GRID_HEIGHT - 5),
@@ -64,17 +82,5 @@ export class State implements State {
         column: makeWholeRandomUpTo(GRID_WIDTH),
       },
     }
-
-    this.subject = new Subject()
-  }
-
-  public observe(onModelChange): void {
-    this.subject.subscribe(onModelChange)
-    this.subject.next(this.model)
-  }
-
-  public changeState(changes: StateChanges): void {
-    this.model[changes.name] = changes.value
-    this.subject.next(this.model)
   }
 }

@@ -62,7 +62,7 @@ function drowTriangleBorderAtPoint(
   triangle.lineTo(B + x, y)
   triangle.closePath()
 
-  stage.lineWidth = B / 8
+  stage.lineWidth = B / 10
   stage.strokeStyle = color
   stage.stroke(triangle)
 }
@@ -93,7 +93,6 @@ function drowTriangleAtPoint(
 ): void {
   const stage = canvas.getContext('2d') as CanvasRenderingContext2D
   const orientedCoordinate: number = orientation === Orient.DOWN ? y + H : y - H
-  const orientedCenterCoordinate: number = orientation === Orient.DOWN ? y + H / 3 : y - H / 3
 
   const triangle = new Path2D()
   triangle.moveTo(x, y)

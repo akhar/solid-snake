@@ -17,7 +17,7 @@ export class Game {
     directions: Directions
   ) {
     this.state = state
-    this.state.initModel(this.getFood(), [
+    this.state.initModel(this.generateFood(), [
       getRandomCoordinatesInsidePadding(GRID_HEIGHT, GRID_WIDTH, PADDING),
     ])
     this.render = render
@@ -68,10 +68,10 @@ export class Game {
     })
 
   private placeFood = (): void => {
-    this.state.changeState({ name: 'food', value: this.getFood() })
+    this.state.changeState({ name: 'food', value: this.generateFood() })
   }
 
-  private getFood = (): Coordinates => {
+  private generateFood = (): Coordinates => {
     const food: Coordinates = getRandomCoordinatesInsidePadding(GRID_HEIGHT, GRID_WIDTH, 1)
     if (this.model && isSelfCrossed(food, this.model.snake)) {
       this.placeFood()

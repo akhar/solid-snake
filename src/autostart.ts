@@ -1,8 +1,8 @@
 import { AnimationClock } from './animation'
 import { GRID_COLOR, PANEL_FONT, SNAKE_COLOR, WIDTH } from './cfg'
+import { Keyboard } from './control/keyboard'
 import { Directions } from './direction'
 import { Game } from './game'
-import { Keyboard } from './keyboard'
 import { Render } from './render/render'
 import { State } from './state'
 

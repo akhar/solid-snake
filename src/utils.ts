@@ -22,3 +22,18 @@ export function compareCoordinates(c1: Coordinates, c2: Coordinates): boolean {
 export function isMobileDevice(): boolean {
   return typeof window.orientation !== 'undefined' || navigator.userAgent.indexOf('IEMobile') !== -1
 }
+
+export function getRandomCoordinates(gridHeight: number, gridWidth: number): Coordinates {
+  return { row: makeWholeRandomUpTo(gridHeight), column: makeWholeRandomUpTo(gridWidth) }
+}
+
+export function getRandomCoordinatesInsidePadding(
+  gridHeight: number,
+  gridWidth: number,
+  padding: number
+): Coordinates {
+  return {
+    row: makeWholeRandomFromTo(padding, gridHeight - padding),
+    column: makeWholeRandomFromTo(padding, gridWidth - padding),
+  }
+}

@@ -1,12 +1,12 @@
 import { interval, Subscription } from 'rxjs'
 import { AnimationClock } from './animation'
-import { GAME_SPEED, GRID_HEIGHT, GRID_WIDTH } from './cfg'
+import { GAME_SPEED, GRID_HEIGHT, GRID_WIDTH, PADDING } from './cfg'
 import { hasFoodEaten, isGameWillBeOver, isSelfCrossed } from './checks'
 import { Direction, Directions } from './direction'
 import { Render } from './render/render'
 import { Orient } from './render/stage'
 import { Coordinates, Model, State } from './state'
-import { compareCoordinates, getOrientation, makeWholeRandomUpTo } from './utils'
+import { compareCoordinates, getOrientation, getRandomCoordinatesInsidePadding } from './utils'
 
 // TODO: mobile version with screen contriller
 export class Game {
@@ -17,6 +17,9 @@ export class Game {
     directions: Directions
   ) {
     this.state = state
+    this.state.initModel(this.getFood(), [
+      getRandomCoordinatesInsidePadding(GRID_HEIGHT, GRID_WIDTH, PADDING),
+    ])
     this.render = render
     this.directions = directions
 
@@ -65,15 +68,15 @@ export class Game {
     })
 
   private placeFood = (): void => {
-    const snake = this.model.snake
-    const row: number = makeWholeRandomUpTo(GRID_HEIGHT)
-    const column: number = makeWholeRandomUpTo(GRID_WIDTH)
-    const value: Coordinates = { row, column }
+    this.state.changeState({ name: 'food', value: this.getFood() })
+  }
 
-    if (isSelfCrossed(value, snake)) {
+  private getFood = (): Coordinates => {
+    const food: Coordinates = getRandomCoordinatesInsidePadding(GRID_HEIGHT, GRID_WIDTH, 1)
+    if (this.model && isSelfCrossed(food, this.model.snake)) {
       this.placeFood()
     } else {
-      this.state.changeState({ name: 'food', value })
+      return food
     }
   }
 
@@ -81,13 +84,16 @@ export class Game {
     head: Coordinates,
     newHead: Coordinates,
     snake: Coordinates[],
-    direction: Direction
+    direction: Direction,
+    food: Coordinates
   ): void => {
     if (isGameWillBeOver(GRID_HEIGHT, GRID_WIDTH, newHead)) {
       this.endGame()
     } else {
-      if (hasFoodEaten(head)) {
+      if (hasFoodEaten(head, food)) {
         this.state.changeState({ name: 'snake', value: [newHead, ...snake] })
+        const value: Coordinates[] = [...this.model.eaten, head]
+        this.state.changeState({ name: 'eaten', value })
         this.placeFood()
       } else {
         this.state.changeState({ name: 'snake', value: [newHead] })
@@ -96,19 +102,25 @@ export class Game {
     }
   }
 
-  //TODO: refactor this pile of shit
   private moveSnake = (): void => {
     const snake: Coordinates[] = this.model.snake
     const direction: Direction = this.directions.getDirection(this.model.activeKeys)
     const head: Coordinates = snake[0]
     const newHead: Coordinates = this.makeNewHead(head, direction)
+    const food: Coordinates = this.model.food
 
     if (snake.length === 1) {
-      this.moveOneCellSnake(head, newHead, snake, direction)
+      this.moveOneCellSnake(head, newHead, snake, direction, food)
     } else {
       const neck: Coordinates = snake[1]
-      const newTail: Coordinates[] = hasFoodEaten(head) ? snake : snake.slice(0, snake.length - 1)
-      hasFoodEaten(head) && this.placeFood()
+      const newTail: Coordinates[] = hasFoodEaten(head, food)
+        ? snake
+        : snake.slice(0, snake.length - 1)
+      if (hasFoodEaten(head, food)) {
+        const value: Coordinates[] = [...this.model.eaten, head]
+        this.state.changeState({ name: 'eaten', value })
+        this.placeFood()
+      }
 
       const isDirectionWrong: boolean = compareCoordinates(neck, newHead)
       const newHeadCorected = isDirectionWrong

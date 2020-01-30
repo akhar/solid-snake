@@ -49,9 +49,10 @@ export class Keyboard {
   }
 
   private handleKeyUp = (key: KeyboardEvent['code']) => {
-    if (key === 'Enter') {
-      this.state.initModel()
-    }
+    // FIXME:
+    // if (key === 'Enter') {
+    //   this.state.initModel()
+    // }
     if (key === 'Space') {
       this.state.changeState({
         name: 'isRunning',

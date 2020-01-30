@@ -51,7 +51,7 @@ export class Render implements Render {
   }
 
   private renderSnake(snake: Coordinates[], eaten: Coordinates[]): void {
-    snake.forEach((tile: Coordinates, index: number) => {
+    snake.forEach((tile: Coordinates) => {
       this.drowTriangle({ ...tile, color: SNAKE_COLOR })
     })
     eaten.forEach((tile: Coordinates) => {

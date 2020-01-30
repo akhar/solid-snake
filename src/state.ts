@@ -1,7 +1,5 @@
 import { Subject } from 'rxjs'
-import { GRID_HEIGHT, GRID_WIDTH } from './cfg'
 import { Direction } from './direction'
-import { makeWholeRandomFromTo, makeWholeRandomUpTo } from './utils'
 
 export type Coordinates = {
   row: number
@@ -35,7 +33,7 @@ export type Model = {
 export interface State {
   observe(getState): void
   changeState(chanages: StateChanges): void
-  initModel(model: Model): void
+  initModel(food: Coordinates, snake: Coordinates[]): void
 }
 
 export class State implements State {
@@ -43,7 +41,6 @@ export class State implements State {
   private subject: Subject<unknown>
 
   constructor() {
-    this.initModel()
     this.subject = new Subject()
   }
 
@@ -57,7 +54,7 @@ export class State implements State {
     this.subject.next(this.model)
   }
 
-  public initModel(): void {
+  public initModel(food: Coordinates, snake: Coordinates[]): void {
     this.model = {
       seconds: 0,
       isRunning: false,
@@ -70,17 +67,8 @@ export class State implements State {
       },
       score: 0,
       eaten: [],
-      snake: [
-        {
-          row: makeWholeRandomFromTo(5, GRID_HEIGHT - 5),
-          column: makeWholeRandomFromTo(5, GRID_WIDTH - 5),
-        },
-      ],
-      food: {
-        //TODO: do not interferate with snake
-        row: makeWholeRandomUpTo(GRID_HEIGHT),
-        column: makeWholeRandomUpTo(GRID_WIDTH),
-      },
+      snake,
+      food,
     }
   }
 }

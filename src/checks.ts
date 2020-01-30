@@ -11,13 +11,8 @@ export function isSelfCrossed(head: Coordinates, tail: Coordinates[]): boolean {
   return result
 }
 
-export function hasFoodEaten(head: Coordinates): boolean {
-  const food = this.model.food
-  if (compareCoordinates(food, head)) {
-    const value: Coordinates[] = [...this.model.eaten, head]
-    this.state.changeState({ name: 'eaten', value })
-    return true
-  }
+export function hasFoodEaten(head: Coordinates, food: Coordinates): boolean {
+  return compareCoordinates(food, head)
 }
 
 export function isGameWillBeOver(

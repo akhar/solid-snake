@@ -1,6 +1,6 @@
 import { interval, Subscription } from 'rxjs'
 import { AnimationClock } from './animation'
-import { GAME_SPEED, GRID_HEIGHT, GRID_WIDTH, PADDING } from './cfg'
+import { GAME_SPEED, GRID_HEIGHT, GRID_WIDTH } from './cfg'
 import { hasFoodEaten, isGameWillBeOver, isSelfCrossed } from './checks'
 import { Direction, Directions } from './direction'
 import { Render } from './render/render'
@@ -17,9 +17,7 @@ export class Game {
     directions: Directions
   ) {
     this.state = state
-    this.state.initModel(this.generateFood(), [
-      getRandomCoordinatesInsidePadding(GRID_HEIGHT, GRID_WIDTH, PADDING),
-    ])
+    this.state.initModel()
     this.render = render
     this.directions = directions
 
@@ -36,6 +34,7 @@ export class Game {
         this.stopGame()
       }
     })
+    
   }
 
   private render: Render
@@ -55,7 +54,13 @@ export class Game {
     this.state.changeState({ name: 'isRunning', value: false })
   }
 
+  private endGame = (): void => {
+    this.stopGame()
+    this.state.changeState({ name: 'isGameOver', value: true })
+  }
+
   private game = (step: number): void => {
+    !this.model.food && this.placeFood()
     step % GAME_SPEED === 0 && this.state.changeState({ name: 'seconds', value: step / GAME_SPEED })
     this.moveSnake()
     this.updateEaten()
@@ -71,10 +76,14 @@ export class Game {
     this.state.changeState({ name: 'food', value: this.generateFood() })
   }
 
+  private clearFood = (): void => {
+    this.state.changeState({name: 'food', value: null})
+  }
+
   private generateFood = (): Coordinates => {
     const food: Coordinates = getRandomCoordinatesInsidePadding(GRID_HEIGHT, GRID_WIDTH, 1)
     if (this.model && isSelfCrossed(food, this.model.snake)) {
-      this.placeFood()
+      this.generateFood()
     } else {
       return food
     }
@@ -94,7 +103,7 @@ export class Game {
         this.state.changeState({ name: 'snake', value: [newHead, ...snake] })
         const value: Coordinates[] = [...this.model.eaten, head]
         this.state.changeState({ name: 'eaten', value })
-        this.placeFood()
+        this.clearFood()
       } else {
         this.state.changeState({ name: 'snake', value: [newHead] })
       }
@@ -119,7 +128,7 @@ export class Game {
       if (hasFoodEaten(head, food)) {
         const value: Coordinates[] = [...this.model.eaten, head]
         this.state.changeState({ name: 'eaten', value })
-        this.placeFood()
+        this.clearFood()
       }
 
       const isDirectionWrong: boolean = compareCoordinates(neck, newHead)
@@ -136,11 +145,6 @@ export class Game {
         this.state.changeState({ name: 'snake', value: newSnake })
       }
     }
-  }
-
-  private endGame = (): void => {
-    this.stopGame()
-    this.state.changeState({ name: 'isGameOver', value: true })
   }
 
   private makeNewHead = (head: Coordinates, direction: Direction): Coordinates => {

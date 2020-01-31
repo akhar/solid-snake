@@ -5,7 +5,7 @@ export interface Controller {
   handleKeyDown(key: KeyboardEvent['code']): void
 }
 
-export class Controller {
+export class Controller implements Controller {
   private model: Model
   private state: State
 
@@ -24,10 +24,9 @@ export class Controller {
   }
 
   public handleKeyUp = (key: KeyboardEvent['code']): void => {
-    // FIXME:
-    // if (key === 'Enter') {
-    //   this.state.initModel()
-    // }
+    if (key === 'Enter') {
+      this.state.initModel()
+    }
     if (key === 'Space') {
       this.state.changeState({
         name: 'isRunning',

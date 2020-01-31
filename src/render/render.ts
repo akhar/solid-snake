@@ -2,12 +2,7 @@ import { BACKGROUND_COLOR, FOOD_COLOR, HEIGHT, SNAKE_COLOR, WIDTH } from '../cfg
 import { Coordinates, Model } from '../state'
 import { drowGridOnCanvas } from './grid'
 import { clearPanelOnCanvas, drowPanelOnCanvas } from './panel'
-import {
-  clearStageOnCanvas,
-  drowCircleInTriangleOnCanvas,
-  drowTriangleBorderOnCanvas,
-  drowTriangleOnCanvas,
-} from './stage'
+import { clearStageOnCanvas, drowCircleInTriangleOnCanvas, drowTriangleBorderOnCanvas, drowTriangleOnCanvas } from './stage'
 
 export interface Render {
   renderModel(model: Model): void
@@ -48,6 +43,7 @@ export class Render implements Render {
     this.info.innerHTML = `${model.snake.length - 1} pts. ${model.seconds} sec.`
 
     model.isGameOver && this.drowPanel('Game over')
+    !model.isGameOver && !model.isRunning && this.drowPanel('Press space')
   }
 
   private renderSnake(snake: Coordinates[], eaten: Coordinates[]): void {

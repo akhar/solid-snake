@@ -1,5 +1,7 @@
 import { Subject } from 'rxjs'
+import { GRID_HEIGHT, GRID_WIDTH, PADDING } from './cfg'
 import { Direction } from './direction'
+import { getRandomCoordinatesInsidePadding } from './utils'
 
 export type Coordinates = {
   row: number
@@ -20,7 +22,7 @@ export type ActiveKeys = {
 
 export type Model = {
   snake: Coordinates[]
-  food: Coordinates
+  food?: Coordinates
   eaten: Coordinates[]
   score: number
   activeKeys: ActiveKeys
@@ -54,7 +56,7 @@ export class State implements State {
     this.subject.next(this.model)
   }
 
-  public initModel(food: Coordinates, snake: Coordinates[]): void {
+  public initModel(): void {
     this.model = {
       seconds: 0,
       isRunning: false,
@@ -67,8 +69,7 @@ export class State implements State {
       },
       score: 0,
       eaten: [],
-      snake,
-      food,
+      snake: [getRandomCoordinatesInsidePadding(GRID_HEIGHT, GRID_WIDTH, PADDING)],
     }
   }
 }
